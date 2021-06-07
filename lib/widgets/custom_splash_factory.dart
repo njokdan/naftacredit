@@ -99,7 +99,6 @@ class CustomSplash extends InteractiveInkFeature {
   static const InteractiveInkFeatureFactory splashFactory =
       CustomSplashFactory();
 
-  late Animation<int> _alpha;
   AnimationController? _alphaController;
   final BorderRadius _borderRadius;
   final RectCallback? _clipCallback;
@@ -139,8 +138,7 @@ class CustomSplash extends InteractiveInkFeature {
     ShapeBorder? customBorder,
     double? radius,
     VoidCallback? onRemoved,
-  })  : assert(textDirection != null),
-        _position = position,
+  })  : _position = position,
         _borderRadius = borderRadius ?? BorderRadius.zero,
         _customBorder = customBorder,
         _targetRadius = radius ??
@@ -155,7 +153,6 @@ class CustomSplash extends InteractiveInkFeature {
             referenceBox: referenceBox,
             color: splashColor,
             onRemoved: onRemoved) {
-    assert(_borderRadius != null);
     _radiusController = AnimationController(
         duration: _kUnconfirmedSplashDuration, vsync: controller.vsync)
       ..addListener(controller.markNeedsPaint)
@@ -168,10 +165,6 @@ class CustomSplash extends InteractiveInkFeature {
         duration: _kSplashFadeDuration, vsync: controller.vsync)
       ..addListener(controller.markNeedsPaint)
       ..addStatusListener(_handleAlphaStatusChanged);
-    _alpha = _alphaController!.drive(IntTween(
-      begin: splashColor.alpha,
-      end: 0,
-    ));
 
     controller.addInkFeature(this);
   }

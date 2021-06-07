@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:naftacredit/utils/colors.dart';
+import 'package:naftacredit/utils/utils.dart';
 import 'package:wiredash/wiredash.dart';
 
 part 'styles-adapter.dart';
@@ -90,28 +91,30 @@ class AppTheme extends HiveObject {
         alignLabelWithHint: true,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         isDense: true,
-        filled: false,
-        focusColor: Colors.transparent,
-        hoverColor: Colors.transparent,
+        filled: true,
         hintStyle: TextStyle(color: Colors.grey),
         labelStyle: TextStyle(color: Colors.grey),
         errorStyle: TextStyle(color: AppColors.errorRed),
-        fillColor: Colors.transparent,
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.accentColor),
-          borderRadius: BorderRadius.circular(8.0),
+        fillColor: AppColors.inputBgColor,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 14.0,
+          horizontal: 12.0,
         ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.errorRed, width: 1.5),
-          borderRadius: BorderRadius.circular(8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
+        ),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorRed, width: 2.0),
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 1.5),
-          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
         ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.errorRed),
-          borderRadius: BorderRadius.circular(8.0),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorRed, width: 1.3),
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
         ),
       ),
       textTheme: TextTheme()
@@ -141,28 +144,30 @@ class AppTheme extends HiveObject {
         alignLabelWithHint: true,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         isDense: true,
-        filled: false,
-        focusColor: Colors.transparent,
-        hoverColor: Colors.transparent,
+        filled: true,
         hintStyle: TextStyle(color: Colors.grey),
         labelStyle: TextStyle(color: Colors.grey),
         errorStyle: TextStyle(color: AppColors.errorRed),
-        fillColor: Colors.transparent,
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.accentColor),
-          borderRadius: BorderRadius.circular(8.0),
+        fillColor: AppColors.secondaryColor.shade400,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 14.0,
+          horizontal: 12.0,
         ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.errorRed, width: 1.5),
-          borderRadius: BorderRadius.circular(8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
+        ),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorRed, width: 2.0),
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 1.5),
-          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
         ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.errorRed),
-          borderRadius: BorderRadius.circular(8.0),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorRed, width: 1.3),
+          borderRadius: BorderRadius.circular(Helpers.inputBorderRadius),
         ),
       ),
       textTheme: TextTheme()
@@ -192,7 +197,7 @@ class AppTheme extends HiveObject {
       bottomSheetTheme: _bottomSheetThemeData,
       bottomNavigationBarTheme: _bottomNavigationBarTheme,
       buttonTheme: _buttonThemeData,
-      textTheme: GoogleFonts.montserratTextTheme(_textTheme),
+      textTheme: GoogleFonts.openSansTextTheme(_textTheme),
     );
   }
 

@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static Color fromHex(String hex) =>
-      Color(int.parse(hex.substring(1, 7), radix: 16) + 0xFF000000);
+  static Color fromHex(String hex) {
+    if (!hex.startsWith('#')) hex = '#$hex';
+    return Color(int.parse(hex.substring(1, 7), radix: 16) + 0xFF000000);
+  }
 
   static Color get random =>
       Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0)
@@ -135,4 +137,8 @@ class AppColors {
 
   static const Color infectedBg = Color(0xfffbeae5);
   static const Color iconGrey = Color(0xff455a64);
+  static const Color textColor = Color(0xffA6A6A6);
+  static const Color inputTextColor = Color(0xff1A1A1A);
+  static const Color inputBgColor = Color(0xffF0F0F0);
+  static const Color inputBgColorDark = Color(0xffF0F0F0);
 }
