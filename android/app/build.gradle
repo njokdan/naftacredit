@@ -50,6 +50,12 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false // Add this
+        // abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.app.naftacredit"
         minSdkVersion 21
