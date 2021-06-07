@@ -14,6 +14,8 @@ import 'package:google_sign_in/google_sign_in.dart' as _i8;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:internet_connection_checker/internet_connection_checker.dart'
     as _i9;
+import 'package:naftacredit/features/auth/presentation/managers/otp_code_cubit/otp_code_cubit.dart'
+    as _i13;
 import 'package:naftacredit/features/core/presentation/managers/network/network_cubit.dart'
     as _i10;
 import 'package:naftacredit/features/onborading/presentation/managers/onboarding/onboarding_cubit.dart'
@@ -41,6 +43,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i8.GoogleSignIn>(() => modules.googleSignIn);
     gh.lazySingleton<_i9.InternetConnectionChecker>(
         () => modules.connectionChecker);
+    gh.factory<_i13.OtpCodeCubit>(() => _i13.OtpCodeCubit());
     gh.factory<_i10.NetworkCubit>(() => _i10.NetworkCubit());
     gh.factory<_i11.OnboardingCubit>(() => _i11.OnboardingCubit());
     gh.factory<_i12.ThemeCubit>(() => _i12.ThemeCubit());

@@ -16,11 +16,11 @@ class SplashScreen extends StatelessWidget with AutoRouteWrapper {
       child: BlocListener<OnboardingCubit, OnboardingState>(
         listenWhen: (p, c) => p.isLoading != c.isLoading,
         listener: (context, state) {
-          // if (state.isLoading == false)
-          //   navigator.pushAndPopUntil(
-          //     OnboardingRoute(),
-          //     predicate: (_) => false,
-          //   );
+          if (state.isLoading == false)
+            navigator.pushAndPopUntil(
+              OnboardingRoute(),
+              predicate: (_) => false,
+            );
         },
         child: this,
       ),

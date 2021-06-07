@@ -40,8 +40,8 @@ class BuildEnvironment implements Secrets {
       : Secrets.WIREDASH_ANDROID_PROJECT_SECRET;
 
   Duration get splashDuration => flavor.fold(
-        dev: (_) => const Duration(milliseconds: 14500),
-        prod: (_) => const Duration(milliseconds: 2500),
+        dev: (_) => const Duration(milliseconds: 1200),
+        prod: (_) => const Duration(milliseconds: 1500),
       );
 
   /// Sets up the top-level [env] getter on the first call only.
