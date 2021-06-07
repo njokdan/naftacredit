@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "304428649917-tbbf3nghbbe4rhk7mjg9mkceaeog9fmt.apps.googleusercontent.com",
+          "client_id": "304428649917-33avi136c4cbenaknknkapeuc8q41n2h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.app.naftacredit",
-            "certificate_hash": "49a72547ae2b761689d8c8fd22cde578466a7a7a"
+            "certificate_hash": "a6799fa1b58d110d980090702e32ee63bbe6727b"
           }
         },
         {
@@ -58,11 +58,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "304428649917-6o6vnk8a0s2qhit39of2rljnh04l16kk.apps.googleusercontent.com",
+          "client_id": "304428649917-qsla021uhmpphhjslh1gmuljgjenkojs.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.app.naftacredit.dev",
-            "certificate_hash": "ee1f0d8fe847429dc24bac00ee62a4dc01e618cc"
+            "certificate_hash": "26c6971caa619f56b8452b201689d7d5e26f45ce"
           }
         },
         {
