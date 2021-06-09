@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$OtpCodeStateTearOff {
   const _$OtpCodeStateTearOff();
 
-  _Initial initial() {
-    return const _Initial();
+  _OtpCodeState call() {
+    return const _OtpCodeState();
   }
 }
 
@@ -25,30 +25,7 @@ class _$OtpCodeStateTearOff {
 const $OtpCodeState = _$OtpCodeStateTearOff();
 
 /// @nodoc
-mixin _$OtpCodeState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
+mixin _$OtpCodeState {}
 
 /// @nodoc
 abstract class $OtpCodeStateCopyWith<$Res> {
@@ -67,80 +44,42 @@ class _$OtpCodeStateCopyWithImpl<$Res> implements $OtpCodeStateCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$InitialCopyWith<$Res> {
-  factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) then) =
-      __$InitialCopyWithImpl<$Res>;
+abstract class _$OtpCodeStateCopyWith<$Res> {
+  factory _$OtpCodeStateCopyWith(
+          _OtpCodeState value, $Res Function(_OtpCodeState) then) =
+      __$OtpCodeStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$InitialCopyWithImpl<$Res> extends _$OtpCodeStateCopyWithImpl<$Res>
-    implements _$InitialCopyWith<$Res> {
-  __$InitialCopyWithImpl(_Initial _value, $Res Function(_Initial) _then)
-      : super(_value, (v) => _then(v as _Initial));
+class __$OtpCodeStateCopyWithImpl<$Res> extends _$OtpCodeStateCopyWithImpl<$Res>
+    implements _$OtpCodeStateCopyWith<$Res> {
+  __$OtpCodeStateCopyWithImpl(
+      _OtpCodeState _value, $Res Function(_OtpCodeState) _then)
+      : super(_value, (v) => _then(v as _OtpCodeState));
 
   @override
-  _Initial get _value => super._value as _Initial;
+  _OtpCodeState get _value => super._value as _OtpCodeState;
 }
 
 /// @nodoc
 
-class _$_Initial implements _Initial {
-  const _$_Initial();
+class _$_OtpCodeState implements _OtpCodeState {
+  const _$_OtpCodeState();
 
   @override
   String toString() {
-    return 'OtpCodeState.initial()';
+    return 'OtpCodeState()';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _Initial);
+    return identical(this, other) || (other is _OtpCodeState);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class _Initial implements OtpCodeState {
-  const factory _Initial() = _$_Initial;
+abstract class _OtpCodeState implements OtpCodeState {
+  const factory _OtpCodeState() = _$_OtpCodeState;
 }

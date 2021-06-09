@@ -105,6 +105,8 @@ dependencies:
   avatar_glow: ^2.0.1
   # Capture in-app user feedback, wishes, ratings and much more.
   wiredash: ^0.7.0+1
+  # A flutter package to easily added dotted borders around widgets.
+  dotted_border: ^2.0.0
 
 dependency_overrides:
   build: ">=2.0.0 <2.1.0"
@@ -135,9 +137,10 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/svgs/
     - assets/images/logo/
+    - assets/svgs/
     - assets/svgs/logo/
+    - assets/svgs/verification/
 
   fonts:
     - family: AppIcons
