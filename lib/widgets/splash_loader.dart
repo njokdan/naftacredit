@@ -27,7 +27,7 @@ class _SplashPositionedLoaderState extends State<SplashPositionedLoader>
     super.build(context);
 
     return SpinKitPouringHourglass(
-      color: widget.color ?? Theme.of(context).accentColor,
+      color: widget.color ?? Theme.of(context).colorScheme.secondary,
       size: widget.size,
       controller: AnimationController(
         vsync: this,

@@ -2,13 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-class AppColors {
-  AppColors._();
+class Palette {
+  Palette._();
 
-  static Color fromHex(String hex) {
-    if (!hex.startsWith('#')) hex = '#$hex';
-    return Color(int.parse(hex.substring(1, 7), radix: 16) + 0xFF000000);
-  }
+  static Color fromHex(String hex) =>
+      Color(int.parse(hex.substring(1, 7), radix: 16) + 0xFF000000);
 
   static Color get random =>
       Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0)
@@ -26,6 +24,9 @@ class AppColors {
     if (appendHash) value = '#$value';
     return value;
   }
+
+  static MaterialColor material(Color color) =>
+      MaterialColor(color.value, swatch(color));
 
   static Map<int, Color> swatch(Color color) {
     var _color = color;
@@ -51,55 +52,54 @@ class AppColors {
 
   // App Colors
   static const _primaryPrivate = 0xffE5E5E5;
-  static const _primary2Private = 0xffF5F5F5;
   static const _secondaryPrivate = 0xff333333;
   static const _accentPrivate = 0xff17068D;
 
   static const MaterialColor primaryColor = MaterialColor(
     _primaryPrivate,
     <int, Color>{
-      50: Color(0xFFFFFFFF),
-      100: Color(0xFFFFFFFF),
-      200: Color(0xFFFFFFFF),
-      300: Color(_primary2Private),
-      400: Color(0xFFf2f2f2),
+      50: Color(0xFFf2f2f2),
+      100: Color(0xFFefefef),
+      200: Color(0xFFededed),
+      300: Color(0xFFeaeaea),
+      400: Color(0xFFe8e8e8),
       500: Color(_primaryPrivate),
-      600: Color(0xFFe6e6e6),
-      700: Color(0xFFcccccc),
-      800: Color(0xFFb3b3b3),
-      900: Color(0xFF999999),
+      600: Color(0xFFcecece),
+      700: Color(0xFFb7b7b7),
+      800: Color(0xFFa0a0a0),
+      900: Color(0xFF898989),
     },
   );
 
   static const MaterialColor secondaryColor = MaterialColor(
     _secondaryPrivate,
     <int, Color>{
-      50: Color(0xFF737373),
-      100: Color(0xFF666666),
-      200: Color(0xFF595959),
-      300: Color(0xFF4d4d4d),
-      400: Color(0xFF404040),
+      50: Color(0xFF999999),
+      100: Color(0xFF858585),
+      200: Color(0xFF707070),
+      300: Color(0xFF5c5c5c),
+      400: Color(0xFF474747),
       500: Color(_secondaryPrivate),
-      600: Color(0xFF262626),
-      700: Color(0xFF1a1a1a),
-      800: Color(0xFF0d0d0d),
-      900: Color(0xFF000000),
+      600: Color(0xFF2e2e2e),
+      700: Color(0xFF292929),
+      800: Color(0xFF242424),
+      900: Color(0xFF1f1f1f),
     },
   );
 
   static const MaterialColor accentColor = MaterialColor(
     _accentPrivate,
     <int, Color>{
-      50: Color(0xFF9485fa),
-      100: Color(0xFF6a54f8),
-      200: Color(0xFF3f23f6),
-      300: Color(0xFF2509dc),
-      400: Color(0xFF1d07ab),
+      50: Color(0xFF8b83c6),
+      100: Color(0xFF746abb),
+      200: Color(0xFF5d51af),
+      300: Color(0xFF4538a4),
+      400: Color(0xFF2e1f98),
       500: Color(_accentPrivate),
-      600: Color(0xFF15057a),
-      700: Color(0xFF110462),
-      800: Color(0xFF0c0349),
-      900: Color(0xFF080231),
+      600: Color(0xFF15057f),
+      700: Color(0xFF120571),
+      800: Color(0xFF100463),
+      900: Color(0xFF0e0455),
     },
   );
 
@@ -123,6 +123,7 @@ class AppColors {
   static const Color errorRed = Color(0xFFED4337);
   static const Color deepRed = Color(0xFFb3000e);
   static const Color cardColor = Color(0xFFfe4d55);
+  static const Color sosRed = Color(0xFFf73648);
 
   static const Color green = Color(0xFF00C853);
   static const Color successGreen = Color(0xFF4bb543);

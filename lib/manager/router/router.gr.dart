@@ -5,16 +5,17 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i1;
+import 'package:flutter/cupertino.dart' as _i10;
 import 'package:flutter/material.dart' as _i2;
 import 'package:naftacredit/_404.dart' as _i9;
-import 'package:naftacredit/features/auth/presentation/screens/auth_option_screen.dart'
-    as _i5;
 import 'package:naftacredit/features/auth/presentation/screens/email_verification/email_verification_screen.dart'
-    as _i8;
-import 'package:naftacredit/features/auth/presentation/screens/login_sreen.dart'
     as _i6;
-import 'package:naftacredit/features/auth/presentation/screens/signup_screen.dart'
+import 'package:naftacredit/features/auth/presentation/screens/id_verification/export.dart'
     as _i7;
+import 'package:naftacredit/features/auth/presentation/screens/index.dart'
+    as _i5;
+import 'package:naftacredit/features/home/presentation/screens/index.dart'
+    as _i8;
 import 'package:naftacredit/features/onborading/presentation/screens/onboarding_screen.dart'
     as _i4;
 import 'package:naftacredit/features/onborading/presentation/screens/splash_screen.dart'
@@ -44,20 +45,68 @@ class AppRouter extends _i1.RootStackRouter {
     LoginRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i6.LoginScreen();
+          return _i5.LoginScreen();
         },
         title: 'Login'),
     SignupRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i7.SignupScreen();
+          return _i5.SignupScreen();
         },
         title: 'Sign Up'),
     EmailVerificationRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i8.EmailVerificationScreen();
-        }),
+          return _i6.EmailVerificationScreen();
+        },
+        title: 'Email Verification'),
+    VerifyPromptRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i7.VerifyPromptScreen();
+        },
+        fullscreenDialog: true),
+    VerifyPersonalInformationRoute.name: (routeData) =>
+        _i1.AdaptivePage<dynamic>(
+            routeData: routeData,
+            builder: (data) {
+              final args = data.argsAs<VerifyPersonalInformationRouteArgs>(
+                  orElse: () => const VerifyPersonalInformationRouteArgs());
+              return _i7.VerifyPersonalInformationScreen(key: args.key);
+            },
+            title: 'Personal Information'),
+    UploadIdentificationRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i7.UploadIdentificationScreen();
+        },
+        title: 'Upload Identification'),
+    BankBvnVerificationRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i7.BankBvnVerificationScreen();
+        },
+        title: 'BVN Verification'),
+    BankOtpVerificationRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<BankOtpVerificationRouteArgs>(
+              orElse: () => const BankOtpVerificationRouteArgs());
+          return _i7.BankOtpVerificationScreen(key: args.key);
+        },
+        title: 'BVN Verification'),
+    VerificationSucessRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i5.VerificationSucessScreen();
+        },
+        fullscreenDialog: true),
+    HomeRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i8.HomeScreen();
+        },
+        title: 'Dashboard'),
     UnknownRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
@@ -79,6 +128,19 @@ class AppRouter extends _i1.RootStackRouter {
             path: '/signup-screen', fullMatch: true),
         _i1.RouteConfig(EmailVerificationRoute.name,
             path: '/email-verification-screen', fullMatch: true),
+        _i1.RouteConfig(VerifyPromptRoute.name,
+            path: '/verify-prompt-screen', fullMatch: true),
+        _i1.RouteConfig(VerifyPersonalInformationRoute.name,
+            path: '/verify-personal-information-screen', fullMatch: true),
+        _i1.RouteConfig(UploadIdentificationRoute.name,
+            path: '/upload-identification-screen', fullMatch: true),
+        _i1.RouteConfig(BankBvnVerificationRoute.name,
+            path: '/bank-bvn-verification-screen', fullMatch: true),
+        _i1.RouteConfig(BankOtpVerificationRoute.name,
+            path: '/bank-otp-verification-screen', fullMatch: true),
+        _i1.RouteConfig(VerificationSucessRoute.name,
+            path: '/verification-sucess-screen', fullMatch: true),
+        _i1.RouteConfig(HomeRoute.name, path: '/dashboard', fullMatch: true),
         _i1.RouteConfig(UnknownRoute.name, path: '*')
       ];
 }
@@ -118,6 +180,71 @@ class EmailVerificationRoute extends _i1.PageRouteInfo {
       : super(name, path: '/email-verification-screen');
 
   static const String name = 'EmailVerificationRoute';
+}
+
+class VerifyPromptRoute extends _i1.PageRouteInfo {
+  const VerifyPromptRoute() : super(name, path: '/verify-prompt-screen');
+
+  static const String name = 'VerifyPromptRoute';
+}
+
+class VerifyPersonalInformationRoute
+    extends _i1.PageRouteInfo<VerifyPersonalInformationRouteArgs> {
+  VerifyPersonalInformationRoute({_i10.Key? key})
+      : super(name,
+            path: '/verify-personal-information-screen',
+            args: VerifyPersonalInformationRouteArgs(key: key));
+
+  static const String name = 'VerifyPersonalInformationRoute';
+}
+
+class VerifyPersonalInformationRouteArgs {
+  const VerifyPersonalInformationRouteArgs({this.key});
+
+  final _i10.Key? key;
+}
+
+class UploadIdentificationRoute extends _i1.PageRouteInfo {
+  const UploadIdentificationRoute()
+      : super(name, path: '/upload-identification-screen');
+
+  static const String name = 'UploadIdentificationRoute';
+}
+
+class BankBvnVerificationRoute extends _i1.PageRouteInfo {
+  const BankBvnVerificationRoute()
+      : super(name, path: '/bank-bvn-verification-screen');
+
+  static const String name = 'BankBvnVerificationRoute';
+}
+
+class BankOtpVerificationRoute
+    extends _i1.PageRouteInfo<BankOtpVerificationRouteArgs> {
+  BankOtpVerificationRoute({_i10.Key? key})
+      : super(name,
+            path: '/bank-otp-verification-screen',
+            args: BankOtpVerificationRouteArgs(key: key));
+
+  static const String name = 'BankOtpVerificationRoute';
+}
+
+class BankOtpVerificationRouteArgs {
+  const BankOtpVerificationRouteArgs({this.key});
+
+  final _i10.Key? key;
+}
+
+class VerificationSucessRoute extends _i1.PageRouteInfo {
+  const VerificationSucessRoute()
+      : super(name, path: '/verification-sucess-screen');
+
+  static const String name = 'VerificationSucessRoute';
+}
+
+class HomeRoute extends _i1.PageRouteInfo {
+  const HomeRoute() : super(name, path: '/dashboard');
+
+  static const String name = 'HomeRoute';
 }
 
 class UnknownRoute extends _i1.PageRouteInfo {

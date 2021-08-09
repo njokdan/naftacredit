@@ -28,6 +28,6 @@ Map<String, dynamic> _$_$_ServerFailureResponseToJson(
     }
   }
 
-  writeNotNull('errors', instance.errors);
+  writeNotNull('errors', instance.errors?.toJson());
   return val;
 }

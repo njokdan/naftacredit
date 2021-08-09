@@ -151,9 +151,9 @@ class Helpers {
         color: App.theme.primaryColor.withOpacity(0.65),
         child: Center(
           child: SpinKitWave(
-            color: theme.accentColor,
+            color: theme.colorScheme.secondary,
             size: 30.0,
-            duration: Duration(milliseconds: 1200),
+            duration: const Duration(milliseconds: 1200),
             type: SpinKitWaveType.center,
             itemCount: 7,
           ),

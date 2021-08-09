@@ -28,12 +28,12 @@ class AuthOptionScreen extends StatelessWidget with AutoRouteWrapper {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.fromHex('600388'),
-              AppColors.fromHex('05078E'),
-              AppColors.fromHex('37058C'),
-              AppColors.fromHex('600388'),
+              Palette.fromHex('600388'),
+              Palette.fromHex('05078E'),
+              Palette.fromHex('37058C'),
+              Palette.fromHex('600388'),
             ],
-            begin: Alignment(-2.3, 0.4),
+            begin: const Alignment(-2.3, 0.4),
             end: Alignment.bottomRight,
             stops: [0.1935, 0.4246, 0.6526, 0.8888],
           ),
@@ -66,7 +66,7 @@ class AuthOptionScreen extends StatelessWidget with AutoRouteWrapper {
                       horizontal: App.shortest * 0.05,
                     ),
                     child: AutoSizeText.rich(
-                      TextSpan(children: [
+                      const TextSpan(children: [
                         TextSpan(
                           text: 'Nafta Credit aims to help you simplify '
                               'loan accessibility and bill payment needs. ',
@@ -100,9 +100,9 @@ class AuthOptionScreen extends StatelessWidget with AutoRouteWrapper {
                   VerticalSpace(height: App.shortest * 0.1),
                   //
                   AppButton(
-                    onPressed: () => navigator.push(SignupRoute()),
+                    onPressed: () => navigator.push(const SignupRoute()),
                     text: 'Create an Account',
-                    textColor: AppColors.accentColor,
+                    textColor: Palette.accentColor,
                     backgroundColor: Colors.white,
                     height: 30.0,
                   ),
@@ -110,12 +110,12 @@ class AuthOptionScreen extends StatelessWidget with AutoRouteWrapper {
                   VerticalSpace(height: App.shortest * 0.04),
                   //
                   AppButton(
-                    onPressed: () => navigator.push(LoginRoute()),
+                    onPressed: () => navigator.push(const LoginRoute()),
                     text: 'Login',
                     textColor: Colors.white,
                     backgroundColor: Colors.transparent,
                     splashColor: Colors.grey.withOpacity(0.3),
-                    side: BorderSide(width: 1.0, color: Colors.white),
+                    side: const BorderSide(width: 1.0, color: Colors.white),
                     height: 30.0,
                   ),
                 ],

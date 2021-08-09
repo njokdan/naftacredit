@@ -70,7 +70,9 @@ class ShimmerRightContent extends StatelessWidget {
                         ),
                       ),
                     ),
+                    //
                     SizedBox(height: height * 0.1),
+                    //
                     Expanded(
                       child: Container(
                         width: width * 0.8,
@@ -80,7 +82,8 @@ class ShimmerRightContent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
+                    //
                     Expanded(
                       child: Container(
                         width: width * 0.7,
@@ -90,7 +93,9 @@ class ShimmerRightContent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    //
+                    const SizedBox(height: 8),
+                    //
                     Expanded(
                       child: Container(
                         width: width * 0.5,

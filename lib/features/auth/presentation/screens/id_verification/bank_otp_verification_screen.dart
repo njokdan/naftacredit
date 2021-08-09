@@ -9,9 +9,12 @@ import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
 
-class EmailVerificationScreen extends StatelessWidget with AutoRouteWrapper {
+/// A stateless widget to render BankOtpVerificationScreen.
+class BankOtpVerificationScreen extends StatelessWidget with AutoRouteWrapper {
   final TapGestureRecognizer tapRecognizer = TapGestureRecognizer()
     ..onTap = (() => print('resend email otp'));
+
+  BankOtpVerificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -21,9 +24,21 @@ class EmailVerificationScreen extends StatelessWidget with AutoRouteWrapper {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Toolbar(),
       resizeToAvoidBottomInset: false,
       extendBody: true,
+      appBar: Toolbar(
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: Helpers.appPadding),
+            child: Center(
+              child: AutoSizeText(
+                '3 of 3',
+                style: Theme.of(context).textTheme.headline6!.copyWith(),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -40,7 +55,7 @@ class EmailVerificationScreen extends StatelessWidget with AutoRouteWrapper {
                 children: [
                   Flexible(
                     child: AutoSizeText(
-                      'Email Verification',
+                      'Bank Vefirication',
                       softWrap: true,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -58,7 +73,7 @@ class EmailVerificationScreen extends StatelessWidget with AutoRouteWrapper {
                   //
                   Flexible(
                     child: AutoSizeText(
-                      'We sent an OTP Code to the email address you provided. Please enter the code below.',
+                      'We sent an OTP Code to your BVN’s assigned phone number. Please enter the code below.',
                       softWrap: true,
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             // color: Colors.grey.shade700,
@@ -132,9 +147,10 @@ class EmailVerificationScreen extends StatelessWidget with AutoRouteWrapper {
               ),
               child: AppButton(
                 onPressed: () => navigator.popAndPush(
-                  const VerifyPromptRoute(),
+                  const VerificationSucessRoute(),
+                  // predicate: (_) => false,
                 ),
-                text: 'Verify Email',
+                text: 'Complete Verification',
                 textColor: Colors.white,
                 backgroundColor: Helpers.foldTheme(
                   light: () => Palette.accentColor,

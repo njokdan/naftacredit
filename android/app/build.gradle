@@ -52,7 +52,7 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
-        checkReleaseBuilds false // Add this
+        checkReleaseBuilds false
         // abortOnError false
     }
 

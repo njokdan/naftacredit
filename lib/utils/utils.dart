@@ -5,7 +5,7 @@ export 'package:nil/nil.dart';
 
 export 'app_icons_icons.dart';
 export 'assets.dart';
-export 'colors.dart';
+export 'palette.dart';
 export 'extensions/dynamic_extension.dart';
 export 'extensions/list_extension.dart';
 export 'extensions/num_extension.dart';

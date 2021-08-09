@@ -16,12 +16,17 @@ mixin AppAssets {
 
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
-
+  /// LOGO
   static const String logo = '$SVG_DIR/logo/logo.svg';
   static const String logoLoaded = '$SVG_DIR/logo/loaded.svg';
   static const String appStoreLogo = '$IMAGES_DIR/logo/appstore.png';
   static const String logoCircle = '$IMAGES_DIR/logo/circle.png';
 
+  /// AUTHENTICATION (Login/Signup)
+  static const String emailSuccess = '$SVG_DIR/verification/email_success.svg';
+  static const String immigration = '$SVG_DIR/verification/immigration.svg';
+
+  /// USER
   static const String user = '$IMAGES_DIR/user.png';
 
   /////////////////////////////////////////////////////

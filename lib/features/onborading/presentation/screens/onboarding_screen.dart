@@ -28,12 +28,12 @@ class OnboardingScreen extends StatelessWidget with AutoRouteWrapper {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.fromHex('600388'),
-              AppColors.fromHex('05078E'),
-              AppColors.fromHex('37058C'),
-              AppColors.fromHex('600388'),
+              Palette.fromHex('600388'),
+              Palette.fromHex('05078E'),
+              Palette.fromHex('37058C'),
+              Palette.fromHex('600388'),
             ],
-            begin: Alignment(-2.3, 0.4),
+            begin: const Alignment(-2.3, 0.4),
             end: Alignment.bottomRight,
             stops: [0.1935, 0.4246, 0.6526, 0.8888],
           ),
@@ -66,14 +66,14 @@ class OnboardingScreen extends StatelessWidget with AutoRouteWrapper {
                   effect: ExpandingDotsEffect(
                     expansionFactor: 3.5,
                     activeDotColor: Helpers.foldTheme(
-                      light: () => AppColors.accentColor,
-                      dark: () => AppColors.accentColor.shade200,
+                      light: () => Palette.accentColor,
+                      dark: () => Palette.accentColor.shade200,
                     ),
                     radius: 100.0,
                     spacing: 7.0,
                     dotHeight: App.height * 0.005,
                     dotWidth: 7.0,
-                    dotColor: AppColors.accentColor.shade100,
+                    dotColor: Palette.accentColor.shade100,
                   ),
                 ),
               ),
@@ -89,15 +89,15 @@ class OnboardingScreen extends StatelessWidget with AutoRouteWrapper {
                       .isLast(right(s.currentIndex)),
                   child: AppButton(
                     onPressed: () => navigator.pushAndPopUntil(
-                      AuthOptionRoute(),
+                      const AuthOptionRoute(),
                       predicate: (_) => false,
                     ),
                     textColor: Colors.white,
                     backgroundColor: Helpers.foldTheme(
-                      light: () => AppColors.accentColor,
-                      dark: () => AppColors.accentColor.shade200,
+                      light: () => Palette.accentColor,
+                      dark: () => Palette.accentColor.shade200,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 14.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     height: 23,
                     text: 'Continue',
@@ -117,8 +117,8 @@ class OnboardingScreen extends StatelessWidget with AutoRouteWrapper {
                   child: AppIconButton(
                     onPressed: context.read<OnboardingCubit>().next,
                     backgroundColor: Helpers.foldTheme(
-                      light: () => AppColors.accentColor,
-                      dark: () => AppColors.accentColor.shade200,
+                      light: () => Palette.accentColor,
+                      dark: () => Palette.accentColor.shade200,
                     ),
                     child: Icon(
                       Icons.navigate_next_rounded,
@@ -176,8 +176,8 @@ class OnBoardingItemBuilder extends StatelessWidget {
                     '${item!.title}',
                     style: Theme.of(context).textTheme.headline5!.copyWith(
                           color: Helpers.foldTheme(
-                            light: () => AppColors.accentColor,
-                            dark: () => AppColors.accentColor.shade50,
+                            light: () => Palette.accentColor,
+                            dark: () => Palette.accentColor.shade50,
                           ),
                           fontWeight: FontWeight.w700,
                         ),
@@ -186,7 +186,7 @@ class OnBoardingItemBuilder extends StatelessWidget {
                     textAlign: TextAlign.left,
                   ),
                   //
-                  VerticalSpace(height: 20.0),
+                  const VerticalSpace(height: 20.0),
                   //
                   AutoSizeText(
                     '${item!.description}',

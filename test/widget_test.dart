@@ -11,6 +11,6 @@ import 'package:naftacredit/app.dart';
 void main() {
   testWidgets('No test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(Naftacredit());
+    await tester.pumpWidget(const Naftacredit());
   });
 }

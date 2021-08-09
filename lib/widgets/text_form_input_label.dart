@@ -34,7 +34,7 @@ class TextFormInputLabel extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: AutoSizeText(
           text,
           style: style ??

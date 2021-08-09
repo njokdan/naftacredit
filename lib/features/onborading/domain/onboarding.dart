@@ -16,7 +16,7 @@ class OnboardingItem<Pixel> with _$OnboardingItem<Pixel> {
   }) = _OnboardingItem;
 
   static KtList<OnboardingItem<String>> get list => KtList.from([
-        OnboardingItem(
+        const OnboardingItem(
           title: 'Easy Loan Access',
           description: 'Nafta Credit allows you check your '
               'loan eligibility while offering '
@@ -24,7 +24,7 @@ class OnboardingItem<Pixel> with _$OnboardingItem<Pixel> {
           image: AppAssets.logo,
         ),
         //
-        OnboardingItem(
+        const OnboardingItem(
           title: 'Pay Your Bills',
           description: 'Nafta Credit has you covered with easy '
               'bills payment like Cable, Data, '
@@ -32,7 +32,7 @@ class OnboardingItem<Pixel> with _$OnboardingItem<Pixel> {
           image: AppAssets.logo,
         ),
         //
-        OnboardingItem(
+        const OnboardingItem(
           title: 'Keep Track of Loan History',
           description: 'Offering detailed loan breakdowns and history, '
               'you can monitor your payment schedule and track your payables.',

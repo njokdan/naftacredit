@@ -5,6 +5,8 @@ import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
 
 class AdaptiveTextFormInput extends StatelessWidget {
+  final int? maxLines;
+  final int? minLines;
   final bool enableSuggestions;
   final bool autoCorrect;
   final bool obscureText;
@@ -26,6 +28,8 @@ class AdaptiveTextFormInput extends StatelessWidget {
 
   const AdaptiveTextFormInput({
     Key? key,
+    this.maxLines = 1,
+    this.minLines,
     this.enableSuggestions = true,
     this.autoCorrect = true,
     this.obscureText = false,
@@ -50,7 +54,8 @@ class AdaptiveTextFormInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformBuilder(
       material: (_) => TextFormField(
-        maxLines: 1,
+        maxLines: minLines == null ? maxLines : null,
+        minLines: minLines,
         enableSuggestions: enableSuggestions,
         obscureText: obscureText,
         autocorrect: autoCorrect,
@@ -61,7 +66,7 @@ class AdaptiveTextFormInput extends StatelessWidget {
             : MaxLengthEnforcement.none,
         controller: controller,
         cursorColor: Helpers.foldTheme(
-          light: () => Theme.of(context).accentColor,
+          light: () => Theme.of(context).colorScheme.secondary,
           dark: () => Helpers.computeLuminance(
             Theme.of(context).scaffoldBackgroundColor,
           ),
