@@ -130,9 +130,7 @@ jobs:
       - name: Pre build Android APK
         run: |
           flutter doctor -v
-          flutter format --dry-run .
           flutter pub get
-          # flutter test
 
       - name: Build Android APK
         run: |
