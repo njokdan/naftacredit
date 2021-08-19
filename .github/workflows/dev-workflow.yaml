@@ -63,6 +63,7 @@ jobs:
     name: Build APK
     needs: setup
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     env:
       APP_NAME: "Nafta Credit"
       FLUTTER_CHANNEL: "beta"
