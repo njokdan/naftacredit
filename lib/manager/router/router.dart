@@ -1,12 +1,16 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:naftacredit/_404.dart';
 import 'package:naftacredit/features/auth/presentation/screens/index.dart';
 import 'package:naftacredit/features/auth/presentation/screens/id_verification/export.dart';
+import 'package:naftacredit/features/home/presentation/pages/pages.dart';
 import 'package:naftacredit/features/home/presentation/screens/index.dart';
 import 'package:naftacredit/features/onborading/presentation/screens/splash_screen.dart';
 import 'package:naftacredit/features/onborading/presentation/screens/onboarding_screen.dart';
 
 @AdaptiveAutoRouter(
+  replaceInRouteName: 'Screen,Route',
+  preferRelativeImports: false,
   routes: <AutoRoute<dynamic>>[
     AdaptiveRoute(
       initial: true,
@@ -47,7 +51,7 @@ import 'package:naftacredit/features/onborading/presentation/screens/onboarding_
       page: OTPVerificationScreen,
       maintainState: true,
       path: '/otp-verification',
-      cupertinoPageTitle: 'OTP Screen',
+      cupertinoPageTitle: 'OTP',
     ),
     //
     AdaptiveRoute(
@@ -85,13 +89,7 @@ import 'package:naftacredit/features/onborading/presentation/screens/onboarding_
       fullscreenDialog: true,
     ),
     //
-    AdaptiveRoute(
-      path: '/dashboard',
-      fullMatch: true,
-      page: HomeScreen,
-      maintainState: true,
-      cupertinoPageTitle: 'Dashboard',
-    ),
+    dashboardRouter,
     //
     AdaptiveRoute(
       path: '*',
@@ -100,7 +98,43 @@ import 'package:naftacredit/features/onborading/presentation/screens/onboarding_
       maintainState: true,
     ),
   ],
-  replaceInRouteName: 'Screen,Route',
-  preferRelativeImports: false,
 )
 class $AppRouter {}
+
+const dashboardRouter = AutoRoute(
+  path: 'bottom-navigation',
+  fullMatch: true,
+  page: DashboardScreen,
+  maintainState: true,
+  children: [
+    AutoRoute(
+      path: 'home',
+      name: 'HomeRouter',
+      page: EmptyRouterPage,
+      children: [
+        AutoRoute(path: '', page: HomePage),
+        RedirectRoute(path: '*', redirectTo: ''),
+      ],
+    ),
+    //
+    AutoRoute(
+      path: 'loans',
+      name: 'LoansRouter',
+      page: EmptyRouterPage,
+      children: [
+        AutoRoute(path: '', page: LoansPage),
+        RedirectRoute(path: '*', redirectTo: ''),
+      ],
+    ),
+    //
+    AutoRoute(
+      path: 'wallet',
+      name: 'WalletRouter',
+      page: EmptyRouterPage,
+      children: [
+        AutoRoute(path: '', page: WalletPage),
+        RedirectRoute(path: '*', redirectTo: ''),
+      ],
+    ),
+  ],
+);

@@ -14,6 +14,7 @@ mixin AppAssets {
   /////////////  SVGS /////////////
   static const String AUTH_SVG_DIR = '$SVG_DIR/auth';
   static const String ONBOARDING_SVG_DIR = '$SVG_DIR/onboarding';
+  static const String HOME_SVG_DIR = '$SVG_DIR/home';
 
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
@@ -48,6 +49,11 @@ mixin AppAssets {
   static const String loansHistory = '$UI_DIR/Loans_With History.png';
   static const String walletHome = '$UI_DIR/Wallet_Home.png';
   static const String walletFunded = '$UI_DIR/Wallet_Funded.png';
+
+  /// DASHBOARD
+  static const String homeOutlined = '$HOME_SVG_DIR/home-outlined.svg';
+  static const String sendOutlined = '$HOME_SVG_DIR/send-outlined.svg';
+  static const String walletOutlined = '$HOME_SVG_DIR/wallet-outlined.svg';
 
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////

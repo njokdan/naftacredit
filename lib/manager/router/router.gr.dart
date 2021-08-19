@@ -5,13 +5,14 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i1;
-import 'package:flutter/cupertino.dart' as _i9;
+import 'package:flutter/cupertino.dart' as _i10;
 import 'package:flutter/material.dart' as _i2;
 import 'package:naftacredit/_404.dart' as _i8;
 import 'package:naftacredit/features/auth/presentation/screens/id_verification/export.dart'
     as _i6;
 import 'package:naftacredit/features/auth/presentation/screens/index.dart'
     as _i5;
+import 'package:naftacredit/features/home/presentation/pages/pages.dart' as _i9;
 import 'package:naftacredit/features/home/presentation/screens/index.dart'
     as _i7;
 import 'package:naftacredit/features/onborading/presentation/screens/onboarding_screen.dart'
@@ -65,7 +66,7 @@ class AppRouter extends _i1.RootStackRouter {
               type: args.type);
         },
         fullscreenDialog: true,
-        title: 'OTP Screen'),
+        title: 'OTP'),
     VerifyPromptRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
@@ -99,18 +100,47 @@ class AppRouter extends _i1.RootStackRouter {
           return const _i5.VerificationSucessScreen();
         },
         fullscreenDialog: true),
-    HomeRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
+    DashboardRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return const _i7.HomeScreen();
-        },
-        title: 'Dashboard'),
+          return _i7.DashboardScreen();
+        }),
     UnknownRoute.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (_) {
           return _i8.UnknownScreen();
         },
-        title: 'Error 404')
+        title: 'Error 404'),
+    HomeRouter.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        }),
+    LoansRouter.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        }),
+    WalletRouter.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        }),
+    HomePage.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i9.HomePage();
+        }),
+    LoansPage.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i9.LoansPage();
+        }),
+    WalletPage.name: (routeData) => _i1.AdaptivePage<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i9.WalletPage();
+        })
   };
 
   @override
@@ -136,7 +166,25 @@ class AppRouter extends _i1.RootStackRouter {
             path: '/bank-bvn-verification-screen', fullMatch: true),
         _i1.RouteConfig(VerificationSucessRoute.name,
             path: '/verification-sucess-screen', fullMatch: true),
-        _i1.RouteConfig(HomeRoute.name, path: '/dashboard', fullMatch: true),
+        _i1.RouteConfig(DashboardRoute.name,
+            path: 'bottom-navigation',
+            children: [
+              _i1.RouteConfig(HomeRouter.name, path: 'home', children: [
+                _i1.RouteConfig(HomePage.name, path: ''),
+                _i1.RouteConfig('*#redirect',
+                    path: '*', redirectTo: '', fullMatch: true)
+              ]),
+              _i1.RouteConfig(LoansRouter.name, path: 'loans', children: [
+                _i1.RouteConfig(LoansPage.name, path: ''),
+                _i1.RouteConfig('*#redirect',
+                    path: '*', redirectTo: '', fullMatch: true)
+              ]),
+              _i1.RouteConfig(WalletRouter.name, path: 'wallet', children: [
+                _i1.RouteConfig(WalletPage.name, path: ''),
+                _i1.RouteConfig('*#redirect',
+                    path: '*', redirectTo: '', fullMatch: true)
+              ])
+            ]),
         _i1.RouteConfig(UnknownRoute.name, path: '*')
       ];
 }
@@ -173,10 +221,10 @@ class SignupRoute extends _i1.PageRouteInfo {
 
 class OTPVerificationRoute extends _i1.PageRouteInfo<OTPVerificationRouteArgs> {
   OTPVerificationRoute(
-      {_i9.Key? key,
+      {_i10.Key? key,
       int? bvn,
       String? title,
-      _i9.Route<dynamic>? intended,
+      _i10.Route<dynamic>? intended,
       _i5.OTPVerificationScreenType? type})
       : super(name,
             path: '/otp-verification',
@@ -194,13 +242,13 @@ class OTPVerificationRouteArgs {
   const OTPVerificationRouteArgs(
       {this.key, this.bvn, this.title, this.intended, this.type});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
   final int? bvn;
 
   final String? title;
 
-  final _i9.Route<dynamic>? intended;
+  final _i10.Route<dynamic>? intended;
 
   final _i5.OTPVerificationScreenType? type;
 }
@@ -213,7 +261,7 @@ class VerifyPromptRoute extends _i1.PageRouteInfo {
 
 class VerifyPersonalInformationRoute
     extends _i1.PageRouteInfo<VerifyPersonalInformationRouteArgs> {
-  VerifyPersonalInformationRoute({_i9.Key? key})
+  VerifyPersonalInformationRoute({_i10.Key? key})
       : super(name,
             path: '/verify-personal-information-screen',
             args: VerifyPersonalInformationRouteArgs(key: key));
@@ -224,7 +272,7 @@ class VerifyPersonalInformationRoute
 class VerifyPersonalInformationRouteArgs {
   const VerifyPersonalInformationRouteArgs({this.key});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 }
 
 class UploadIdentificationRoute extends _i1.PageRouteInfo {
@@ -248,14 +296,54 @@ class VerificationSucessRoute extends _i1.PageRouteInfo {
   static const String name = 'VerificationSucessRoute';
 }
 
-class HomeRoute extends _i1.PageRouteInfo {
-  const HomeRoute() : super(name, path: '/dashboard');
+class DashboardRoute extends _i1.PageRouteInfo {
+  const DashboardRoute({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'bottom-navigation', initialChildren: children);
 
-  static const String name = 'HomeRoute';
+  static const String name = 'DashboardRoute';
 }
 
 class UnknownRoute extends _i1.PageRouteInfo {
   const UnknownRoute() : super(name, path: '*');
 
   static const String name = 'UnknownRoute';
+}
+
+class HomeRouter extends _i1.PageRouteInfo {
+  const HomeRouter({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'home', initialChildren: children);
+
+  static const String name = 'HomeRouter';
+}
+
+class LoansRouter extends _i1.PageRouteInfo {
+  const LoansRouter({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'loans', initialChildren: children);
+
+  static const String name = 'LoansRouter';
+}
+
+class WalletRouter extends _i1.PageRouteInfo {
+  const WalletRouter({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'wallet', initialChildren: children);
+
+  static const String name = 'WalletRouter';
+}
+
+class HomePage extends _i1.PageRouteInfo {
+  const HomePage() : super(name, path: '');
+
+  static const String name = 'HomePage';
+}
+
+class LoansPage extends _i1.PageRouteInfo {
+  const LoansPage() : super(name, path: '');
+
+  static const String name = 'LoansPage';
+}
+
+class WalletPage extends _i1.PageRouteInfo {
+  const WalletPage() : super(name, path: '');
+
+  static const String name = 'WalletPage';
 }

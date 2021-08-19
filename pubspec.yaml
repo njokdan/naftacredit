@@ -175,6 +175,7 @@ flutter:
     - assets/svgs/logo/
     - assets/svgs/verification/
     - assets/svgs/onboarding/
+    - assets/svgs/home/
 
   fonts:
     - family: AppIcons
