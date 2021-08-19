@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0-301.2.beta <3.0.0"
 
 dependencies:
   flutter:
@@ -45,6 +45,13 @@ dependencies:
   internet_connection_checker: ^0.0.1+1
   # Service locator
   get_it: ^7.1.3
+  # A powerful Http client for Dart, which supports Interceptors,
+  # Global configuration, FormData, Request Cancellation, File downloading, Timeout etc.
+  dio: ^4.0.0
+  # Pretty Dio logger is a Dio interceptor that logs network calls in a pretty, easy to read format.
+  pretty_dio_logger: ^1.2.0-beta-1
+  # Dio HTTP cache interceptor with multiple stores respecting HTTP directives (or not).
+  dio_cache_interceptor: ^3.0.1
   # Can be considered as a rewrite of provider
   # to make improvements that would be otherwise impossible.
   # flutter_riverpod: ^0.12.4
@@ -74,6 +81,10 @@ dependencies:
   # provides internationalization
   # and localization facilities
   intl: ^0.17.0
+  # A basic password strength estimator for Dart.
+  # Considers the length of the password, used characters,
+  # and whether or not the password appears in the top 10,000 most used passwords.
+  password_strength: ^0.2.0
   # A declarative routing solution
   auto_route: ^2.2.0
   # Helpful package for manipulating "overlays":
@@ -84,6 +95,10 @@ dependencies:
   shimmer: ^2.0.0
   # Wraps platform-specific persistent storage for simple data
   shared_preferences: ^2.0.6
+  # A Flutter plugin for finding commonly used locations on the filesystem.
+  path_provider: ^2.0.2
+  # sembast db stands for Simple Embedded Application Store database
+  sembast: ^3.1.0+2
   # A port of Kotlin's Kotlin Standard library for Dart/Flutter projects.
   kt_dart: ^0.9.1
   # A port of the Rails/ActiveSupport inflector library to Dart.
@@ -116,6 +131,18 @@ dependencies:
   dotted_border: ^2.0.0
   # A flutter package which provides a simple way to Showcase/Highlight your widgets step by step.
   showcaseview: ^1.1.0
+  # Put a semi-transparent image with the design over the top of the developed layout.
+  # It helps you to compare original design and current page.
+  pixel_perfect: ^1.1.0
+  # A Flutter plugin for iOS and Android for picking images from the image library,
+  # and taking new pictures with the camera.
+  image_picker: ^0.8.3+2
+  # A package that allows you to use the native file explorer to pick
+  # single or multiple files, with extensions filtering support.
+  file_picker: ^4.0.0
+  # A flutter plugin for adapting screen and font size.Let your UI
+  # display a reasonable layout on different screen sizes!
+  flutter_screenutil: ^5.0.0+2
 
 dev_dependencies:
   flutter_test:
@@ -142,9 +169,12 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/logo/
+    - assets/images/onboarding/
+    - assets/images/ui/
     - assets/svgs/
     - assets/svgs/logo/
     - assets/svgs/verification/
+    - assets/svgs/onboarding/
 
   fonts:
     - family: AppIcons

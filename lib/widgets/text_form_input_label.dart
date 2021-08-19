@@ -43,7 +43,7 @@ class TextFormInputLabel extends StatelessWidget {
                     decoration: decoration,
                     fontSize: fontSize,
                     fontWeight: fontWeight ?? FontWeight.w600,
-                    letterSpacing: letterSpacing ?? Helpers.letterSpacing,
+                    letterSpacing: letterSpacing ?? Helpers.labelLetterSpacing,
                   ),
           maxLines: maxLines,
           textAlign: textAlign,

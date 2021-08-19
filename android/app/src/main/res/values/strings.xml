@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Nafta Credit</string>
+    <string name="facebook_app_id">527312988521519</string>
+    <string name="fb_login_protocol_scheme">fb527312988521519</string>
 </resources>

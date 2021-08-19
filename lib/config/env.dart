@@ -40,15 +40,15 @@ class BuildEnvironment implements Secrets {
       : Secrets.WIREDASH_ANDROID_PROJECT_SECRET;
 
   Duration get splashDuration => flavor.fold(
-        dev: (_) => const Duration(milliseconds: 1200),
-        prod: (_) => const Duration(milliseconds: 1500),
+        dev: () => const Duration(milliseconds: 1200),
+        prod: () => const Duration(milliseconds: 1500),
       );
 
   /// Sets up the top-level [env] getter on the first call only.
   static Future<void> init({@required BuildFlavor? flavor}) async {
     _env ??= BuildEnvironment.factory(
       flavor: flavor,
-      uri: Uri.https('', ''),
+      uri: Uri.https(EndPoints.APP_DOMAIN, EndPoints.API_ENDPOINT),
     );
 
     // This app is designed only to work vertically, so we limit
@@ -59,12 +59,12 @@ class BuildEnvironment implements Secrets {
     ]);
 
     await flavor?.fold(
-      dev: (_) async {
+      dev: () async {
         await locator(Environment.dev);
         await getIt<FirebaseCrashlytics>()
             .setCrashlyticsCollectionEnabled(false);
       },
-      prod: (_) async {
+      prod: () async {
         await locator(Environment.prod);
         await getIt<FirebaseCrashlytics>()
             .setCrashlyticsCollectionEnabled(true);
@@ -73,17 +73,17 @@ class BuildEnvironment implements Secrets {
   }
 }
 
-extension on BuildFlavor {
+extension XBuildFlavor on BuildFlavor {
   U fold<U>({
-    U Function(BuildFlavor)? dev,
-    required U Function(BuildFlavor) prod,
+    U Function()? dev,
+    required U Function() prod,
   }) {
     switch (this) {
       case BuildFlavor.dev:
-        return dev?.call(this) ?? prod.call(this);
+        return dev?.call() ?? prod.call();
       case BuildFlavor.prod:
       default:
-        return prod.call(this);
+        return prod.call();
     }
   }
 }

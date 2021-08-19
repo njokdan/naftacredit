@@ -1,7 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:naftacredit/_404.dart';
 import 'package:naftacredit/features/auth/presentation/screens/index.dart';
-import 'package:naftacredit/features/auth/presentation/screens/email_verification/email_verification_screen.dart';
 import 'package:naftacredit/features/auth/presentation/screens/id_verification/export.dart';
 import 'package:naftacredit/features/home/presentation/screens/index.dart';
 import 'package:naftacredit/features/onborading/presentation/screens/splash_screen.dart';
@@ -44,9 +43,11 @@ import 'package:naftacredit/features/onborading/presentation/screens/onboarding_
     //
     AdaptiveRoute(
       fullMatch: true,
-      page: EmailVerificationScreen,
+      fullscreenDialog: true,
+      page: OTPVerificationScreen,
       maintainState: true,
-      cupertinoPageTitle: 'Email Verification',
+      path: '/otp-verification',
+      cupertinoPageTitle: 'OTP Screen',
     ),
     //
     AdaptiveRoute(
@@ -73,13 +74,6 @@ import 'package:naftacredit/features/onborading/presentation/screens/onboarding_
     AdaptiveRoute(
       fullMatch: true,
       page: BankBvnVerificationScreen,
-      maintainState: true,
-      cupertinoPageTitle: 'BVN Verification',
-    ),
-    //
-    AdaptiveRoute(
-      fullMatch: true,
-      page: BankOtpVerificationScreen,
       maintainState: true,
       cupertinoPageTitle: 'BVN Verification',
     ),

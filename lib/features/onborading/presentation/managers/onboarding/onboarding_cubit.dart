@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kt_dart/collection.dart';
-import 'package:naftacredit/config/env.dart';
 import 'package:naftacredit/features/onborading/domain/onboarding.dart';
 
 part 'onboarding_state.dart';
@@ -15,12 +14,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   final KtList<OnboardingItem<String>> items = OnboardingItem.list;
 
   OnboardingCubit() : super(OnboardingState.initial());
-
-  void delaySplash() async {
-    emit(state.copyWith(isLoading: true));
-    await Future.delayed(env.splashDuration);
-    emit(state.copyWith(isLoading: false));
-  }
 
   void attachControllerListener() {
     state.controller.addListener(() {

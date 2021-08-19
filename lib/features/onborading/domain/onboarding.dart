@@ -21,7 +21,7 @@ class OnboardingItem<Pixel> with _$OnboardingItem<Pixel> {
           description: 'Nafta Credit allows you check your '
               'loan eligibility while offering '
               'quick access to loan disbursement.',
-          image: AppAssets.logo,
+          image: AppAssets.onboarding0,
         ),
         //
         const OnboardingItem(
@@ -29,14 +29,14 @@ class OnboardingItem<Pixel> with _$OnboardingItem<Pixel> {
           description: 'Nafta Credit has you covered with easy '
               'bills payment like Cable, Data, '
               'Credit & Electricity payments.',
-          image: AppAssets.logo,
+          image: AppAssets.onboarding1,
         ),
         //
         const OnboardingItem(
           title: 'Keep Track of Loan History',
           description: 'Offering detailed loan breakdowns and history, '
               'you can monitor your payment schedule and track your payables.',
-          image: AppAssets.logo,
+          image: AppAssets.onboarding2,
         ),
       ]);
 }

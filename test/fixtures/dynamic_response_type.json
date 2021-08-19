@@ -1,0 +1,9 @@
+{
+    "status": "error",
+    "message": "Please wait before retrying",
+    "errors": {
+        "bvn": [
+            "Invalid BVN supplied"
+        ]
+    }
+}

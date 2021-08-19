@@ -18,10 +18,10 @@ class _$NetworkStateTearOff {
 
   _NetworkState call(
       {bool isLoading = false,
-      Either<Response, bool> isConnected =
+      Either<Failure, bool> isConnected =
           const Left(NetworkFailure.notConnected()),
-      Either<Response, bool> hasInternet =
-          const Left(NetworkFailure.poorInternetConnection())}) {
+      Either<Failure, bool> hasInternet =
+          const Left(NetworkFailure.poorInternet())}) {
     return _NetworkState(
       isLoading: isLoading,
       isConnected: isConnected,
@@ -36,8 +36,8 @@ const $NetworkState = _$NetworkStateTearOff();
 /// @nodoc
 mixin _$NetworkState {
   bool get isLoading => throw _privateConstructorUsedError;
-  Either<Response, bool> get isConnected => throw _privateConstructorUsedError;
-  Either<Response, bool> get hasInternet => throw _privateConstructorUsedError;
+  Either<Failure, bool> get isConnected => throw _privateConstructorUsedError;
+  Either<Failure, bool> get hasInternet => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NetworkStateCopyWith<NetworkState> get copyWith =>
@@ -51,8 +51,8 @@ abstract class $NetworkStateCopyWith<$Res> {
       _$NetworkStateCopyWithImpl<$Res>;
   $Res call(
       {bool isLoading,
-      Either<Response, bool> isConnected,
-      Either<Response, bool> hasInternet});
+      Either<Failure, bool> isConnected,
+      Either<Failure, bool> hasInternet});
 }
 
 /// @nodoc
@@ -77,11 +77,11 @@ class _$NetworkStateCopyWithImpl<$Res> implements $NetworkStateCopyWith<$Res> {
       isConnected: isConnected == freezed
           ? _value.isConnected
           : isConnected // ignore: cast_nullable_to_non_nullable
-              as Either<Response, bool>,
+              as Either<Failure, bool>,
       hasInternet: hasInternet == freezed
           ? _value.hasInternet
           : hasInternet // ignore: cast_nullable_to_non_nullable
-              as Either<Response, bool>,
+              as Either<Failure, bool>,
     ));
   }
 }
@@ -95,8 +95,8 @@ abstract class _$NetworkStateCopyWith<$Res>
   @override
   $Res call(
       {bool isLoading,
-      Either<Response, bool> isConnected,
-      Either<Response, bool> hasInternet});
+      Either<Failure, bool> isConnected,
+      Either<Failure, bool> hasInternet});
 }
 
 /// @nodoc
@@ -123,11 +123,11 @@ class __$NetworkStateCopyWithImpl<$Res> extends _$NetworkStateCopyWithImpl<$Res>
       isConnected: isConnected == freezed
           ? _value.isConnected
           : isConnected // ignore: cast_nullable_to_non_nullable
-              as Either<Response, bool>,
+              as Either<Failure, bool>,
       hasInternet: hasInternet == freezed
           ? _value.hasInternet
           : hasInternet // ignore: cast_nullable_to_non_nullable
-              as Either<Response, bool>,
+              as Either<Failure, bool>,
     ));
   }
 }
@@ -138,17 +138,17 @@ class _$_NetworkState with DiagnosticableTreeMixin implements _NetworkState {
   const _$_NetworkState(
       {this.isLoading = false,
       this.isConnected = const Left(NetworkFailure.notConnected()),
-      this.hasInternet = const Left(NetworkFailure.poorInternetConnection())});
+      this.hasInternet = const Left(NetworkFailure.poorInternet())});
 
   @JsonKey(defaultValue: false)
   @override
   final bool isLoading;
   @JsonKey(defaultValue: const Left(NetworkFailure.notConnected()))
   @override
-  final Either<Response, bool> isConnected;
-  @JsonKey(defaultValue: const Left(NetworkFailure.poorInternetConnection()))
+  final Either<Failure, bool> isConnected;
+  @JsonKey(defaultValue: const Left(NetworkFailure.poorInternet()))
   @override
-  final Either<Response, bool> hasInternet;
+  final Either<Failure, bool> hasInternet;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -196,15 +196,15 @@ class _$_NetworkState with DiagnosticableTreeMixin implements _NetworkState {
 abstract class _NetworkState implements NetworkState {
   const factory _NetworkState(
       {bool isLoading,
-      Either<Response, bool> isConnected,
-      Either<Response, bool> hasInternet}) = _$_NetworkState;
+      Either<Failure, bool> isConnected,
+      Either<Failure, bool> hasInternet}) = _$_NetworkState;
 
   @override
   bool get isLoading => throw _privateConstructorUsedError;
   @override
-  Either<Response, bool> get isConnected => throw _privateConstructorUsedError;
+  Either<Failure, bool> get isConnected => throw _privateConstructorUsedError;
   @override
-  Either<Response, bool> get hasInternet => throw _privateConstructorUsedError;
+  Either<Failure, bool> get hasInternet => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$NetworkStateCopyWith<_NetworkState> get copyWith =>

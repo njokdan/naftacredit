@@ -50,7 +50,8 @@ class Toolbar extends AppBar {
               ? Tooltip(
                   message: 'Back',
                   child: IconButton(
-                    icon: leadingIcon ?? const Icon(Icons.keyboard_backspace_rounded),
+                    icon: leadingIcon ??
+                        const Icon(Icons.keyboard_backspace_rounded),
                     onPressed: leadingAction ?? navigator.pop,
                   ),
                 )

@@ -3,7 +3,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:naftacredit/features/auth/presentation/managers/managers.dart';
 import 'package:naftacredit/features/core/presentation/widgets/dropdown_field_widget.dart';
+import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
 
@@ -13,7 +16,39 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return this;
+    return BlocProvider(
+      create: (_) => getIt<AccountVerificationCubit>(),
+      child: BlocListener<AccountVerificationCubit, AccountVerificationState>(
+        listenWhen: (p, c) =>
+            p.status.getOrElse(() => null) != c.status.getOrElse(() => null) ||
+            (c.status.getOrElse(() => null) != null &&
+                (c.status.getOrElse(() => null)!.isLeft() &&
+                    c.status.getOrElse(() => null)!.fold(
+                          (f) => f.foldCode(orElse: () => false),
+                          (_) => false,
+                        ))),
+        listener: (c, s) => s.status.fold(
+          () => null,
+          (eth) => eth?.fold(
+            (f) => PopupDialog.error(message: f.message).render(c),
+            (r) => PopupDialog.success(
+              message: r?.message,
+              listener: (_) => _?.fold(
+                dismissed: () => r?.fold(
+                  success: (p0) => p0.pop
+                      ? navigator.pushAndPopUntil(
+                          const VerificationSucessRoute(),
+                          predicate: (_) => false,
+                        )
+                      : null,
+                ),
+              ),
+            ).render(c),
+          ),
+        ),
+        child: this,
+      ),
+    );
   }
 
   @override
@@ -25,7 +60,7 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
             padding: EdgeInsets.only(right: Helpers.appPadding),
             child: Center(
               child: AutoSizeText(
-                '2 of 3',
+                '3 of 3',
                 style: Theme.of(context).textTheme.headline6!.copyWith(),
               ),
             ),
@@ -69,47 +104,54 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
                       child: AutoSizeText(
                         'Please select a means of Identification and upload a matching ID.',
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              // color: Colors.grey.shade700,
                               fontSize: 16.0,
                               letterSpacing: Helpers.letterSpacing,
                             ),
                       ),
                     ),
                     //
-                    Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
-                    //
-                    Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
+                    Flexible(child: VerticalSpace(height: App.shortest * 0.07)),
                     //
                     Flexible(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const TextFormInputLabel(text: 'Country'),
-                          //
                           Flexible(
-                            child: DropdownFieldWidget<String>(
-                              hint: '-- Select ID to Upload --',
-                              items: [
-                                'Driver\'s License',
-                                'Voter\'s Card',
-                                'International Passport',
-                                'National Identity Card',
-                              ]
-                                  .map<DropdownMenuItem<String>>(
-                                    (item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: AutoSizeText(
-                                        '$item',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: true,
+                            child: BlocBuilder<AccountVerificationCubit,
+                                AccountVerificationState>(
+                              builder: (c, s) =>
+                                  DropdownFieldWidget<Map<String, dynamic>>(
+                                hint: '-- Select an ID to upload --',
+                                items: AccountVerificationState.documentTypes
+                                    .map<
+                                        DropdownMenuItem<Map<String, dynamic>>>(
+                                      (item) => DropdownMenuItem<
+                                          Map<String, dynamic>>(
+                                        value: item,
+                                        child: AutoSizeText(
+                                          '${item.entries.firstOrNone?.value}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                  .toList(),
-                              selected: 'Driver\'s License',
-                              onChanged: (_) {},
+                                    )
+                                    .toList(),
+                                validate: s.validate,
+                                disabled: s.isLoading,
+                                selected: s.documentType,
+                                error: s.status.fold(
+                                  () => null,
+                                  (a) => a?.fold(
+                                    (f) => f.errors?.document?.firstOrNone,
+                                    (_) => null,
+                                  ),
+                                ),
+                                onChanged: c
+                                    .read<AccountVerificationCubit>()
+                                    .documentTypeChanged,
+                              ),
                             ),
                           ),
                         ],
@@ -120,9 +162,9 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
                     //
                     DottedBorder(
                       dashPattern: [6, 3, 2, 3],
-                      borderType: BorderType.Rect,
+                      borderType: BorderType.RRect,
                       padding: const EdgeInsets.all(5.0),
-                      radius: const Radius.circular(16.0),
+                      radius: const Radius.circular(Helpers.buttonRadius),
                       color: Helpers.computeLuminance(
                           Theme.of(context).scaffoldBackgroundColor),
                       child: ConstrainedBox(
@@ -130,19 +172,81 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
                           maxHeight: App.shortest * 0.5,
                           maxWidth: double.infinity,
                         ),
-                        child: Container(
-                          color: Helpers.foldTheme(
-                            light: () => Palette.inputBgColor,
-                            dark: () => Palette.secondaryColor.shade400,
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Theme.of(context).platform.fold(
-                                    material: () => Icons.photo_camera,
-                                    cupertino: () => CupertinoIcons.camera,
-                                  ),
-                              color: Colors.grey,
-                              size: 45.0,
+                        child: BlocBuilder<AccountVerificationCubit,
+                            AccountVerificationState>(
+                          builder: (c, s) => Material(
+                            child: InkWell(
+                              onTap: () async {
+                                if (!s.isLoading)
+                                  await App.showAdaptiveBottomSheet(
+                                    context,
+                                    builder: (_) => _DocumentPickerSheet(
+                                      pickers: [
+                                        _DocumentPicker(
+                                          name: 'Camera',
+                                          asset: Helpers.foldTheme(
+                                            light: () =>
+                                                AppAssets.cameraColored,
+                                            dark: () =>
+                                                AppAssets.cameraOutlined,
+                                          ),
+                                          onPressed: c
+                                              .read<AccountVerificationCubit>()
+                                              .pickFromCamera,
+                                        ),
+                                        _DocumentPicker(
+                                          name: 'File Explorer',
+                                          asset: Helpers.foldTheme(
+                                            light: () =>
+                                                AppAssets.folderColored,
+                                            dark: () =>
+                                                AppAssets.folderOutlined,
+                                          ),
+                                          onPressed: c
+                                              .read<AccountVerificationCubit>()
+                                              .pickFromExplorer,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                              },
+                              child: Container(
+                                color: Helpers.foldTheme(
+                                  light: () => Palette.inputBgColor,
+                                  dark: () => Palette.secondaryColor.shade400,
+                                ),
+                                child: Center(
+                                  child: s.mimeType == null
+                                      ? Icon(
+                                          Theme.of(context).platform.fold(
+                                                material: () =>
+                                                    Icons.photo_camera,
+                                                cupertino: () =>
+                                                    CupertinoIcons.camera,
+                                              ),
+                                          color: Colors.grey,
+                                          size: 45.0,
+                                        )
+                                      : s.mimeType?.fold(
+                                          img: Image.file(
+                                            s.document!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          doc: (a) => Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              a == DocumentMimeType.pdf
+                                                  ? AppAssets.pdf
+                                                  : AppAssets.docx,
+                                              const VerticalSpace(height: 25),
+                                              AutoSizeText(
+                                                  '${s.documentName.getOrEmpty}'),
+                                            ],
+                                          ),
+                                        ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -162,25 +266,54 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
               padding: EdgeInsets.symmetric(
                 horizontal: Helpers.appPadding,
               ),
-              child: AppButton(
-                onPressed: () => navigator.push(
-                  const BankBvnVerificationRoute(),
+              child: BlocBuilder<AccountVerificationCubit,
+                  AccountVerificationState>(
+                buildWhen: (p, c) => p.isLoading != c.isLoading,
+                builder: (c, s) => Column(
+                  children: [
+                    Visibility(
+                      visible: !s.isLoading,
+                      replacement: App.loadingHourGlass,
+                      child: AppButton(
+                        onPressed:
+                            c.read<AccountVerificationCubit>().uploadDocumentID,
+                        text: 'Upload ID',
+                        textColor: Colors.white,
+                        backgroundColor: Helpers.foldTheme(
+                          light: () => Palette.accentColor,
+                          dark: () => Colors.transparent,
+                        ),
+                        splashColor: Helpers.foldTheme(
+                          light: () => Colors.white30,
+                          dark: () => Colors.grey.shade800,
+                        ),
+                        side: Helpers.foldTheme(
+                          light: () => null,
+                          dark: () => const BorderSide(color: Colors.white),
+                        ),
+                        height: 30.0,
+                      ),
+                    ),
+                    //
+                    VerticalSpace(height: App.shortest * 0.04),
+                    //
+                    AppButton(
+                      onPressed: () => navigator.pushAndPopUntil(
+                        const HomeRoute(),
+                        predicate: (_) => false,
+                      ),
+                      text: 'Skip for now',
+                      textColor: Palette.errorRed,
+                      backgroundColor: Colors.transparent,
+                      splashColor: Helpers.foldTheme(
+                        light: () => Colors.white30,
+                        dark: () => Colors.grey.shade800,
+                      ),
+                      side: const BorderSide(color: Palette.errorRed),
+                      height: 30.0,
+                    ),
+                  ],
                 ),
-                text: 'Upload ID',
-                textColor: Colors.white,
-                backgroundColor: Helpers.foldTheme(
-                  light: () => Palette.accentColor,
-                  dark: () => Colors.transparent,
-                ),
-                splashColor: Helpers.foldTheme(
-                  light: () => Colors.white30,
-                  dark: () => Colors.grey.shade800,
-                ),
-                side: Helpers.foldTheme(
-                  light: () => null,
-                  dark: () => const BorderSide(color: Colors.white),
-                ),
-                height: 30.0,
               ),
             ),
           ),
@@ -188,4 +321,86 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
       ),
     );
   }
+}
+
+class _DocumentPickerSheet extends StatelessWidget {
+  final List<_DocumentPicker> pickers;
+
+  const _DocumentPickerSheet({
+    Key? key,
+    this.pickers = const [],
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        height: 0.15.sh,
+        child: LayoutBuilder(
+          builder: (_, constraints) => Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ...ListTile.divideTiles(
+                context: context,
+                tiles: pickers.map(
+                  (p) => InkWell(
+                    onTap: () {
+                      p.onPressed.call();
+                      navigator.pop();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 0.05.sw),
+                      child: SizedBox(
+                        height: constraints.maxHeight / pickers.length,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 4,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    child: p.asset ?? const SizedBox.shrink(),
+                                  ),
+                                  //
+                                  HorizontalSpace(width: 0.04.sw),
+                                  //
+                                  Flexible(
+                                    child: AutoSizeText(
+                                      p.name,
+                                      style: TextStyle(fontSize: 17.sp),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            //
+                            const Spacer(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DocumentPicker {
+  final String name;
+  final Widget? asset;
+  final VoidCallback onPressed;
+
+  _DocumentPicker({
+    required this.name,
+    this.asset,
+    required this.onPressed,
+  });
 }

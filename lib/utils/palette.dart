@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 class Palette {
   Palette._();
 
-  static Color fromHex(String hex) =>
-      Color(int.parse(hex.substring(1, 7), radix: 16) + 0xFF000000);
+  static Color fromHex(String hex) {
+    if (!hex.startsWith('#')) hex = '#$hex';
+    return Color(int.parse(hex.substring(1, 7), radix: 16) + 0xFF000000);
+  }
 
   static Color get random =>
       Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0)
@@ -134,6 +136,7 @@ class Palette {
   static const Color navbarGrey = Color(0xFF4F4F4F);
 
   static const Color assessmentBlue = Color(0xff0070e0);
+  static const Color infoBlue = Color(0xff42a5f5);
   static const Color optionBlue = Color(0xff007bf4);
 
   static const Color infectedBg = Color(0xfffbeae5);

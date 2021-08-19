@@ -1,9 +1,12 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart' hide Router;
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:naftacredit/features/auth/presentation/managers/managers.dart';
+import 'package:naftacredit/features/core/presentation/index.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/manager/theme/theme.dart';
@@ -22,6 +25,10 @@ class Naftacredit extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ThemeCubit>(create: (_) => getIt<ThemeCubit>()),
+        BlocProvider<NetworkCubit>(create: (_) => getIt<NetworkCubit>()),
+        BlocProvider<AuthWatcherCubit>(
+          create: (_) => getIt<AuthWatcherCubit>(),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, AppTheme>(
         builder: (context, app) => Portal(
@@ -36,6 +43,10 @@ class Naftacredit extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 theme: app.cupertinoThemeData(),
                 color: Colors.deepPurpleAccent,
+                locale: env.flavor.fold(
+                  dev: () => DevicePreview.locale(context),
+                  prod: () => null,
+                ),
                 routeInformationParser: _router.defaultRouteParser(),
                 routerDelegate: _router.delegate(
                   navigatorObservers: () => <NavigatorObserver>[
@@ -45,17 +56,27 @@ class Naftacredit extends StatelessWidget {
                       ),
                   ],
                 ),
-                builder: (context, child) {
-                  /// Setup Basic Utils
-                  Helpers.setup(context, _router);
-                  return child!;
-                },
+                builder: (context, widget) => DevicePreview.appBuilder(
+                  context,
+                  Helpers.setup(
+                    context,
+                    _router,
+                    ScreenUtilInit(
+                      designSize: const Size(375, 812),
+                      builder: () => widget!,
+                    ),
+                  ),
+                ),
               ),
               material: (context) => MaterialApp.router(
                 title: AppStrings.appName.capitalizeFirst(),
                 debugShowCheckedModeBanner: false,
                 theme: app.themeData(),
                 darkTheme: AppTheme.dark().themeData(),
+                locale: env.flavor.fold(
+                  dev: () => DevicePreview.locale(context),
+                  prod: () => null,
+                ),
                 routeInformationParser: _router.defaultRouteParser(),
                 routerDelegate: _router.delegate(
                   navigatorObservers: () => <NavigatorObserver>[
@@ -65,11 +86,17 @@ class Naftacredit extends StatelessWidget {
                       ),
                   ],
                 ),
-                builder: (context, child) {
-                  /// Setup Basic Utils
-                  Helpers.setup(context, _router);
-                  return child!;
-                },
+                builder: (context, widget) => DevicePreview.appBuilder(
+                  context,
+                  Helpers.setup(
+                    context,
+                    _router,
+                    ScreenUtilInit(
+                      designSize: const Size(375, 812),
+                      builder: () => widget!,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

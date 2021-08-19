@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,22 +34,17 @@ void throwIfNot(bool condition, Object error) {
 }
 
 class Helpers {
-  static const Duration autoRetrievalTimeout = Duration(seconds: 40);
-  static const String currency = '₦';
+  /// Create Singleton start ///
+  static final Helpers _singleton = Helpers._();
 
-  static double buttonRadius = 6.0;
   static double appPadding = App.shortest * 0.05;
-  static double letterSpacing = 0.9;
-  static double inputBorderRadius = 6.0;
-  static Future<Directory?> get rootDir async =>
-      await getExternalStorageDirectory();
-  static Future<Directory> get cacheDir async => kIsWeb
-      ? HydratedStorage.webStorageDirectory
-      : await getTemporaryDirectory();
-  static Future<Directory> get documentsDir async =>
-      await getApplicationDocumentsDirectory();
-  static ScrollPhysics physics = const BouncingScrollPhysics();
-  static Duration willPopTimeout = const Duration(seconds: 3);
+  static const Duration autoRetrievalTimeout = Duration(seconds: 40);
+  static const double buttonRadius = 6.0;
+  static const String currency = '₦';
+  static const double inputBorderRadius = 6.0;
+  static late Helpers instance;
+  static const double labelLetterSpacing = 0.56;
+  static const double letterSpacing = 0.9;
   static Logger logger = Logger(
     filter: env.flavor == BuildFlavor.dev
         ? DevelopmentFilter()
@@ -65,7 +59,125 @@ class Helpers {
     )),
   );
 
-  static Helpers setup(BuildContext current, AppRouter router) {
+  static ScrollPhysics physics = const BouncingScrollPhysics();
+  static Duration willPopTimeout = const Duration(seconds: 3);
+
+  late BuildContext context;
+  bool isInitialized = false;
+  late AppRouter router;
+  final DateTime today = DateTime.now();
+
+  factory Helpers() => _singleton;
+
+  Helpers._();
+
+  static Future<Directory?> get rootDir async =>
+      await getExternalStorageDirectory();
+
+  static Future<Directory> get cacheDir async => kIsWeb
+      ? HydratedStorage.webStorageDirectory
+      : await getTemporaryDirectory();
+
+  static Future<Directory> get documentsDir async =>
+      await getApplicationDocumentsDirectory();
+
+  // End ////
+
+  Color? get backgroundOverlayColor => App.theme.primaryColor.withOpacity(0.91);
+
+  Widget get chasingDots => SpinKitChasingDots(
+        color: Theme.of(context).colorScheme.secondary,
+        size: 35.0,
+        duration: const Duration(milliseconds: 1400),
+      );
+
+  Widget get circularLoadingOverlay => Container(
+        color: App.theme.primaryColor.withOpacity(0.65),
+        child: Center(
+          child: CircularProgressBar.adaptive(
+            width: width * 0.08,
+            height: width * 0.08,
+            strokeWidth: 3.5,
+            radius: 14,
+          ),
+        ),
+      );
+
+  /// Returns the current route path
+  String get currentRoute => router.current.name;
+
+  /// The current [WidgetsBinding], if one has been created.
+  WidgetsBinding? get engine => WidgetsBinding.instance;
+
+  /// give access to FocusScope.of(context)
+  FocusNode? get focusScope => FocusManager.instance.primaryFocus;
+
+  /// give access to Immutable MediaQuery.of(context).size.height
+  double get height => MediaQuery.of(context).size.height;
+
+  /// give access to Theme.of(context).iconTheme.color
+  Color? get iconColor => theme.iconTheme.color;
+
+  /// Check if dark mode theme is enable on platform on android Q+
+  bool get isPlatformDarkMode =>
+      (mediaQuery!.platformBrightness == Brightness.dark);
+
+  GlobalKey<NavigatorState> get key => router.navigatorKey;
+
+  Widget get loadingHourGlass => SpinKitPouringHourglass(
+        color: foldTheme(
+          light: () => Theme.of(context).colorScheme.secondary,
+          dark: () => Colors.white70,
+        ),
+        size: 34.0,
+        duration: const Duration(milliseconds: 1100),
+      );
+
+  Widget get loadingWave => SpinKitWave(
+        color: Theme.of(context).colorScheme.secondary,
+        size: 35.0,
+        duration: const Duration(milliseconds: 1200),
+        itemCount: 8,
+        type: SpinKitWaveType.center,
+      );
+
+  /// give access to Immutable MediaQuery.of(context).size.shortestSide
+  double get longest => MediaQuery.of(context).size.longestSide;
+
+  /// give access to MediaQuery.of(context)
+  MediaQueryData? get mediaQuery => MediaQuery.of(context);
+
+  /// give access to Immutable MediaQuery.of(context).size.shortestSide
+  double get shortest => MediaQuery.of(context).size.shortestSide;
+
+  /// give access to TextTheme.of(context)
+  TextTheme? get textTheme => theme.textTheme;
+
+  /// give access to Theme.of(context)
+  ThemeData get theme => Theme.of(context);
+
+  /// give access to Immutable MediaQuery.of(context).size.width
+  double get width => MediaQuery.of(context).size.width;
+
+  static Widget circularLoader({
+    double? width,
+    double? height,
+    double? stroke,
+    double? radius,
+  }) =>
+      CircularProgressBar.adaptive(
+        width: width ?? App.width * 0.08,
+        height: height ?? App.width * 0.08,
+        strokeWidth: stroke ?? 3.5,
+        radius: radius ?? 14,
+      );
+
+  Widget loadingOverlay([Widget? child]) => Container(
+        color: App.theme.colorScheme.primary.withOpacity(0.65),
+        child: Center(child: child ?? chasingDots),
+      );
+
+  static Widget setup(BuildContext current, AppRouter router, Widget child) {
     var _context = router.navigatorKey.currentContext ?? current;
     // Precache dependencies & images
     precache(_context);
@@ -76,7 +188,11 @@ class Helpers {
         ..isInitialized = true;
     }
 
-    return instance..router = router;
+    // Initialize router
+    instance.router = router;
+
+    // Return child
+    return child;
   }
 
   static String writeNotNull(String other) {
@@ -86,14 +202,6 @@ class Helpers {
 
   static DateTime getDate(DateTime d) =>
       DateTime(d.year, d.month, d.day, d.hour, d.minute, d.second);
-
-  static void hideKeyboard([BuildContext? context]) {
-    FocusNode currentFocus = FocusScope.of(context ?? App.context);
-    if (!currentFocus.hasPrimaryFocus &&
-        !currentFocus.hasFocus &&
-        currentFocus.children.isEmpty)
-      FocusManager.instance.primaryFocus!.unfocus();
-  }
 
   static T foldTheme<T>({
     required T Function() light,
@@ -111,8 +219,11 @@ class Helpers {
   static Color computeLuminance(Color color) =>
       color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
 
+  /// Precache Application Images..ensures faster image rendering.
   static Future<void> precache(BuildContext context) async {
-    // await precacheImage(AssetImage(AppAssets.onBoarding1), context);
+    AppAssets.images.forEach(
+      (img) async => await precacheImage(AssetImage(img), context),
+    );
   }
 
   static String hhmmss([Duration duration = Duration.zero]) {
@@ -128,49 +239,6 @@ class Helpers {
     await SystemChannels.platform
         .invokeMethod<void>('SystemNavigator.pop', animated);
   }
-
-  final DateTime today = DateTime.now();
-
-  bool isInitialized = false;
-
-  late BuildContext context;
-
-  late AppRouter router;
-
-  static late Helpers instance;
-
-  /// Create Singleton start ///
-  static final Helpers _singleton = Helpers._();
-  factory Helpers() => _singleton;
-  Helpers._();
-  // End ////
-
-  Color? get backgroundOverlayColor => App.theme.primaryColor.withOpacity(0.91);
-
-  Widget get waveLoadingBar => Container(
-        color: App.theme.primaryColor.withOpacity(0.65),
-        child: Center(
-          child: SpinKitWave(
-            color: theme.colorScheme.secondary,
-            size: 30.0,
-            duration: const Duration(milliseconds: 1200),
-            type: SpinKitWaveType.center,
-            itemCount: 7,
-          ),
-        ),
-      );
-
-  Widget get circularLoadingOverlay => Container(
-        color: App.theme.primaryColor.withOpacity(0.65),
-        child: Center(
-          child: CircularProgressBar.adaptive(
-            width: width * 0.08,
-            height: width * 0.08,
-            strokeWidth: 3.5,
-            radius: 14,
-          ),
-        ),
-      );
 
   Widget positionedLoader(
     BuildContext context, [
@@ -192,61 +260,11 @@ class Helpers {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment:
               _keyboardClosed ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            loader ??
-                CircularProgressBar.adaptive(
-                  width: width * 0.08,
-                  height: width * 0.08,
-                  strokeWidth: 3.5,
-                  radius: 14,
-                ),
-          ],
+          children: [loader ?? circularLoader()],
         ),
       ),
     );
   }
-
-  GlobalKey<NavigatorState> get key => router.navigatorKey;
-
-  // Helper method to open a Hive Box
-  Box<E> box<E>(String name) => Hive.box(name);
-
-  /// Returns the current route path
-  String get currentRoute => router.current.name;
-
-  /// give access to Theme.of(context)
-  ThemeData get theme => Theme.of(context);
-
-  /// give access to TextTheme.of(context)
-  TextTheme? get textTheme => theme.textTheme;
-
-  /// give access to MediaQuery.of(context)
-  MediaQueryData? get mediaQuery => MediaQuery.of(context);
-
-  /// The current [WidgetsBinding], if one has been created.
-  WidgetsBinding? get engine => WidgetsBinding.instance;
-
-  /// give access to Theme.of(context).iconTheme.color
-  Color? get iconColor => theme.iconTheme.color;
-
-  /// give access to FocusScope.of(context)
-  FocusNode? get focusScope => FocusManager.instance.primaryFocus;
-
-  /// give access to Immutable MediaQuery.of(context).size.height
-  double get height => MediaQuery.of(context).size.height;
-
-  /// give access to Immutable MediaQuery.of(context).size.width
-  double get width => MediaQuery.of(context).size.width;
-
-  /// give access to Immutable MediaQuery.of(context).size.shortestSide
-  double get shortest => MediaQuery.of(context).size.shortestSide;
-
-  /// give access to Immutable MediaQuery.of(context).size.shortestSide
-  double get longest => MediaQuery.of(context).size.longestSide;
-
-  /// Check if dark mode theme is enable on platform on android Q+
-  bool get isPlatformDarkMode =>
-      (mediaQuery!.platformBrightness == Brightness.dark);
 
   /// As a rule, Flutter knows which widget to update,
   /// so this command is rarely needed. We can mention situations
@@ -403,6 +421,46 @@ class Helpers {
         );
       },
     ) as U;
+  }
+
+  Future<T> showAdaptiveBottomSheet<T>(
+    BuildContext context, {
+    required WidgetBuilder builder,
+    bool isDismissible = true,
+    Color? backgroundColor,
+    Color? barrierColor,
+    double? elevation,
+    bool enableDrag = true,
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+  }) async {
+    return await Theme.of(context).platform.fold(
+          material: () async => await showModalBottomSheet(
+            context: context,
+            builder: builder,
+            isDismissible: isDismissible,
+            backgroundColor: backgroundColor,
+            barrierColor: barrierColor,
+            elevation: elevation,
+            enableDrag: enableDrag,
+            isScrollControlled: isScrollControlled,
+            useRootNavigator: useRootNavigator,
+          ) as T,
+          cupertino: () async => barrierColor == null
+              ? await showCupertinoModalPopup(
+                  context: context,
+                  builder: builder,
+                  barrierDismissible: isDismissible,
+                  useRootNavigator: useRootNavigator,
+                ) as T
+              : await showCupertinoModalPopup(
+                  context: context,
+                  builder: builder,
+                  barrierColor: barrierColor,
+                  barrierDismissible: isDismissible,
+                  useRootNavigator: useRootNavigator,
+                ) as T,
+        );
   }
 
   Future<U> showAlertDialog<U>({

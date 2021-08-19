@@ -2,25 +2,54 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:naftacredit/features/auth/presentation/managers/managers.dart';
+import 'package:naftacredit/features/core/domain/entities/entities.dart';
 import 'package:naftacredit/features/core/presentation/widgets/dropdown_field_widget.dart';
+import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
 
 /// A stateless widget to render VerifyPersonalInformationScreeny.
 class VerifyPersonalInformationScreen extends StatelessWidget
     with AutoRouteWrapper {
-  final FocusNode firstNameFocus = FocusNode();
-  final FocusNode lastNameFocus = FocusNode();
-  final FocusNode emailFocus = FocusNode();
-  final FocusNode phoneFocus = FocusNode();
-  final FocusNode dobFocus = FocusNode();
-  final FocusNode addressFocus = FocusNode();
-
   VerifyPersonalInformationScreen({Key? key}) : super(key: key);
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return this;
+    return BlocProvider(
+      create: (_) => getIt<AccountVerificationCubit>()..countries(),
+      child: BlocListener<AccountVerificationCubit, AccountVerificationState>(
+        listenWhen: (p, c) =>
+            p.status.getOrElse(() => null) != c.status.getOrElse(() => null) ||
+            (c.status.getOrElse(() => null) != null &&
+                (c.status.getOrElse(() => null)!.isLeft() &&
+                    c.status.getOrElse(() => null)!.fold(
+                          (f) => f.foldCode(orElse: () => false),
+                          (_) => false,
+                        ))),
+        listener: (c, s) => s.status.fold(
+          () => null,
+          (eth) => eth?.fold(
+            (f) => PopupDialog.error(message: f.message).render(c),
+            (r) => PopupDialog.success(
+              message: r?.message,
+              listener: (_) => _?.fold(
+                dismissed: () => r?.fold(
+                  success: (p0) => p0.pop
+                      ? navigator.pushAndPopUntil(
+                          const UploadIdentificationRoute(),
+                          predicate: (_) => false,
+                        )
+                      : null,
+                ),
+              ),
+            ).render(c),
+          ),
+        ),
+        child: this,
+      ),
+    );
   }
 
   @override
@@ -32,7 +61,7 @@ class VerifyPersonalInformationScreen extends StatelessWidget
             padding: EdgeInsets.only(right: Helpers.appPadding),
             child: Center(
               child: AutoSizeText(
-                '1 of 3',
+                '2 of 3',
                 style: Theme.of(context).textTheme.headline6!.copyWith(),
               ),
             ),
@@ -82,219 +111,191 @@ class VerifyPersonalInformationScreen extends StatelessWidget
               //
               Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
               //
-              Flexible(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const TextFormInputLabel(text: 'First Name'),
-                          //
-                          Flexible(
-                            child: AdaptiveTextFormInput(
-                              hintText: 'John',
-                              keyboardType: TextInputType.name,
-                              capitalization: TextCapitalization.words,
-                              autoFillHints: [
-                                AutofillHints.name,
-                                AutofillHints.givenName,
-                                // AutofillHints.familyName,
-                                AutofillHints.middleName,
-                              ],
-                              focus: firstNameFocus,
-                              next: lastNameFocus,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    //
-                    HorizontalSpace(width: App.shortest * 0.05),
-                    //
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const TextFormInputLabel(text: 'Last Name'),
-                          //
-                          Flexible(
-                            child: AdaptiveTextFormInput(
-                              hintText: 'Doe',
-                              keyboardType: TextInputType.name,
-                              capitalization: TextCapitalization.words,
-                              autoFillHints: [AutofillHints.familyName],
-                              focus: lastNameFocus,
-                              next: dobFocus,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //
-              Flexible(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextFormInputLabel(text: 'Date of Birth'),
-                    //
-                    Flexible(
-                      child: AdaptiveTextFormInput(
-                        hintText: '01-01-1990',
-                        keyboardType: TextInputType.datetime,
-                        capitalization: TextCapitalization.none,
-                        autoFillHints: [
-                          AutofillHints.birthday,
-                          AutofillHints.birthdayDay,
-                          AutofillHints.birthdayMonth,
-                          AutofillHints.birthdayYear,
-                        ],
-                        focus: dobFocus,
-                        next: addressFocus,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //
-              Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
-              //
-              Flexible(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextFormInputLabel(text: 'Street Address'),
-                    //
-                    Flexible(
-                      child: AdaptiveTextFormInput(
-                        maxLines: 6,
-                        hintText: '3, Olokun Close, Ojo Town',
-                        keyboardType: TextInputType.multiline,
-                        capitalization: TextCapitalization.words,
-                        action: TextInputAction.newline,
-                        focus: addressFocus,
-                        autoFillHints: [
-                          AutofillHints.fullStreetAddress,
-                          AutofillHints.postalAddress,
-                          AutofillHints.postalAddressExtended,
-                          AutofillHints.addressCityAndState,
-                          AutofillHints.streetAddressLine1,
-                          AutofillHints.streetAddressLine2,
-                          AutofillHints.streetAddressLine3,
-                          AutofillHints.streetAddressLevel1,
-                          AutofillHints.streetAddressLevel2,
-                          AutofillHints.streetAddressLevel3,
-                          AutofillHints.streetAddressLevel4,
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //
-              Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
-              //
-              Flexible(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextFormInputLabel(text: 'City'),
-                    //
-                    Flexible(
-                      child: DropdownFieldWidget<String>(
-                        hint: '-- Select City --',
-                        items: ['Lagos', 'Owerri', 'Abuja']
-                            .map<DropdownMenuItem<String>>(
-                              (item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: AutoSizeText(
-                                  '$item',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
+              BlocBuilder<AccountVerificationCubit, AccountVerificationState>(
+                builder: (c, s) => Form(
+                  autovalidateMode: s.validate
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.disabled,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TextFormInputLabel(text: 'Street Address'),
+                            //
+                            Flexible(
+                              child: AdaptiveTextFormInput(
+                                maxLines: 5,
+                                disabled: s.isLoading,
+                                validate: s.validate,
+                                hintText: '3, Olokun Close, Ojo Town',
+                                keyboardType: TextInputType.multiline,
+                                capitalization: TextCapitalization.words,
+                                action: TextInputAction.newline,
+                                focus: AccountVerificationState.addressFocus,
+                                autoFillHints: [
+                                  AutofillHints.fullStreetAddress,
+                                  AutofillHints.postalAddress,
+                                  AutofillHints.postalAddressExtended,
+                                  AutofillHints.addressCityAndState,
+                                  AutofillHints.streetAddressLine1,
+                                  AutofillHints.streetAddressLine2,
+                                  AutofillHints.streetAddressLine3,
+                                  AutofillHints.streetAddressLevel1,
+                                  AutofillHints.streetAddressLevel2,
+                                  AutofillHints.streetAddressLevel3,
+                                  AutofillHints.streetAddressLevel4,
+                                ],
+                                errorText: s.street.value.fold(
+                                  (f) => f.message,
+                                  (_) => s.status.fold(
+                                    () => null,
+                                    (a) => a?.fold(
+                                      (f) => f.errors?.street?.firstOrNone,
+                                      (_) => null,
+                                    ),
+                                  ),
                                 ),
+                                onChanged: c
+                                    .read<AccountVerificationCubit>()
+                                    .streetChanged,
                               ),
-                            )
-                            .toList(),
-                        selected: 'Lagos',
-                        onChanged: (_) {},
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              //
-              Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
-              //
-              Flexible(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextFormInputLabel(text: 'Country'),
-                    //
-                    Flexible(
-                      child: DropdownFieldWidget<String>(
-                        hint: '-- Select City --',
-                        items: [
-                          'United African Republic',
-                          'Nigeria',
-                          'Cameroon',
-                          'Ghana',
-                          'United Arab Emirates',
-                        ]
-                            .map<DropdownMenuItem<String>>(
-                              (item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: AutoSizeText(
-                                  '$item',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
+                      //
+                      Flexible(
+                          child: VerticalSpace(height: App.shortest * 0.04)),
+                      //
+                      Flexible(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TextFormInputLabel(text: 'State / City'),
+                            //
+                            Flexible(
+                              child: DropdownFieldWidget<ProvinceState?>(
+                                hint: '-- Select State --',
+                                items: s.states
+                                    .asList()
+                                    .map<DropdownMenuItem<ProvinceState?>>(
+                                      (item) =>
+                                          DropdownMenuItem<ProvinceState?>(
+                                        value: item,
+                                        child: AutoSizeText(
+                                          '${item.name?.getOrEmpty}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                disabled: s.isLoading,
+                                disabledHint: '-- Not available --',
+                                validate: s.validate,
+                                selected: s.selectedState,
+                                error: s.status.fold(
+                                  () => null,
+                                  (a) => a?.fold(
+                                    (f) => f.errors?.state?.firstOrNone,
+                                    (_) => null,
+                                  ),
                                 ),
+                                onChanged: c
+                                    .read<AccountVerificationCubit>()
+                                    .provinceStateChanged,
                               ),
-                            )
-                            .toList(),
-                        selected: 'Nigeria',
-                        onChanged: (_) {},
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      //
+                      Flexible(
+                          child: VerticalSpace(height: App.shortest * 0.04)),
+                      //
+                      Flexible(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TextFormInputLabel(text: 'Country'),
+                            //
+                            Flexible(
+                              child: DropdownFieldWidget<Country?>(
+                                hint: '-- Select Country --',
+                                items: s.countries
+                                    .asList()
+                                    .map<DropdownMenuItem<Country?>>(
+                                      (item) => DropdownMenuItem<Country?>(
+                                        value: item,
+                                        child: AutoSizeText(
+                                          '${item.name?.name}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                disabled: s.isLoading,
+                                validate: s.validate,
+                                selected: s.selectedCountry,
+                                disabledHint: 'Fetching all countries..',
+                                error: s.status.fold(
+                                  () => null,
+                                  (a) => a?.fold(
+                                    (f) => f.errors?.country?.firstOrNone,
+                                    (_) => null,
+                                  ),
+                                ),
+                                onChanged: c
+                                    .read<AccountVerificationCubit>()
+                                    .countryChanged,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               //
               Flexible(child: VerticalSpace(height: App.shortest * 0.14)),
               //
               Flexible(
-                child: AppButton(
-                  onPressed: () => navigator.push(
-                    const UploadIdentificationRoute(),
-                    // predicate: (_) => false,
+                child: BlocBuilder<AccountVerificationCubit,
+                    AccountVerificationState>(
+                  buildWhen: (p, c) => p.isLoading != c.isLoading,
+                  builder: (c, s) => Visibility(
+                    visible: !s.isLoading,
+                    replacement: App.loadingHourGlass,
+                    child: AppButton(
+                      onPressed:
+                          c.read<AccountVerificationCubit>().updatePersonalInfo,
+                      text: 'Save and Continue',
+                      height: 30.0,
+                      textColor: Colors.white,
+                      backgroundColor: Helpers.foldTheme(
+                        light: () => Palette.accentColor,
+                        dark: () => Colors.transparent,
+                      ),
+                      splashColor: Helpers.foldTheme(
+                        light: () => Colors.white30,
+                        dark: () => Colors.grey.shade800,
+                      ),
+                      side: Helpers.foldTheme(
+                        light: () => null,
+                        dark: () => const BorderSide(color: Colors.white),
+                      ),
+                    ),
                   ),
-                  text: 'Save and Continue',
-                  textColor: Colors.white,
-                  backgroundColor: Helpers.foldTheme(
-                    light: () => Palette.accentColor,
-                    dark: () => Colors.transparent,
-                  ),
-                  splashColor: Helpers.foldTheme(
-                    light: () => Colors.white30,
-                    dark: () => Colors.grey.shade800,
-                  ),
-                  side: Helpers.foldTheme(
-                    light: () => null,
-                    dark: () => const BorderSide(color: Colors.white),
-                  ),
-                  height: 30.0,
                 ),
               ),
             ],

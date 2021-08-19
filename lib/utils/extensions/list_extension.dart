@@ -8,11 +8,11 @@ extension ListX<T> on Iterable<T> {
     });
   }
 
-  T get firstOrNull {
+  T? get firstOrNone {
     try {
       return first;
     } catch (e) {
-      return null as T;
+      return null;
     }
   }
 

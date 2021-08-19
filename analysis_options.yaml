@@ -16,7 +16,7 @@ analyzer:
 linter:
   rules:
     always_declare_return_types: true
-    cancel_subscriptions: ignore
+    # cancel_subscriptions: ignore
     await_only_futures: true
     prefer_const_constructors: true
     prefer_const_constructors_in_immutables: true

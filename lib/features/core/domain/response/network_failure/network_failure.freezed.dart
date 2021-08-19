@@ -17,31 +17,35 @@ class _$NetworkFailureTearOff {
   const _$NetworkFailureTearOff();
 
   _NoInternetConnectivity notConnected(
-      {String? code,
-      String? error,
-      String message = 'You are offline!',
-      String? details,
-      bool show = true}) {
+      {String message = NetworkFailure._OFFLINE_MSG, bool show = true}) {
     return _NoInternetConnectivity(
-      code: code,
-      error: error,
       message: message,
-      details: details,
       show: show,
     );
   }
 
-  _PoorInternetConnection poorInternetConnection(
-      {String? code,
-      String? error,
-      String message = 'Poor Internet Connection!',
-      String? details,
-      bool show = true}) {
+  _PoorInternetConnection poorInternet(
+      {String message = NetworkFailure._POOR_INTERNET_MSG, bool show = true}) {
     return _PoorInternetConnection(
-      code: code,
-      error: error,
       message: message,
-      details: details,
+      show: show,
+    );
+  }
+
+  _NetworkFailureReceiveTimeout receiveTimeout(
+      {String message = NetworkFailure._RECEIVE_TIMEOUT_MSG,
+      bool show = true}) {
+    return _NetworkFailureReceiveTimeout(
+      message: message,
+      show: show,
+    );
+  }
+
+  _NetworkFailureTimeout timeout(
+      {String message = NetworkFailure._CONNECT_TIMEOUT_MSG,
+      bool show = true}) {
+    return _NetworkFailureTimeout(
+      message: message,
       show: show,
     );
   }
@@ -52,44 +56,41 @@ const $NetworkFailure = _$NetworkFailureTearOff();
 
 /// @nodoc
 mixin _$NetworkFailure {
-  String? get code => throw _privateConstructorUsedError;
-  String? get error => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  String? get details => throw _privateConstructorUsedError;
   bool get show => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? code, String? error, String message,
-            String? details, bool show)
-        notConnected,
-    required TResult Function(String? code, String? error, String message,
-            String? details, bool show)
-        poorInternetConnection,
+    required TResult Function(String message, bool show) notConnected,
+    required TResult Function(String message, bool show) poorInternet,
+    required TResult Function(String message, bool show) receiveTimeout,
+    required TResult Function(String message, bool show) timeout,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? code, String? error, String message,
-            String? details, bool show)?
-        notConnected,
-    TResult Function(String? code, String? error, String message,
-            String? details, bool show)?
-        poorInternetConnection,
+    TResult Function(String message, bool show)? notConnected,
+    TResult Function(String message, bool show)? poorInternet,
+    TResult Function(String message, bool show)? receiveTimeout,
+    TResult Function(String message, bool show)? timeout,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_NoInternetConnectivity value) notConnected,
-    required TResult Function(_PoorInternetConnection value)
-        poorInternetConnection,
+    required TResult Function(_PoorInternetConnection value) poorInternet,
+    required TResult Function(_NetworkFailureReceiveTimeout value)
+        receiveTimeout,
+    required TResult Function(_NetworkFailureTimeout value) timeout,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_NoInternetConnectivity value)? notConnected,
-    TResult Function(_PoorInternetConnection value)? poorInternetConnection,
+    TResult Function(_PoorInternetConnection value)? poorInternet,
+    TResult Function(_NetworkFailureReceiveTimeout value)? receiveTimeout,
+    TResult Function(_NetworkFailureTimeout value)? timeout,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -104,12 +105,7 @@ abstract class $NetworkFailureCopyWith<$Res> {
   factory $NetworkFailureCopyWith(
           NetworkFailure value, $Res Function(NetworkFailure) then) =
       _$NetworkFailureCopyWithImpl<$Res>;
-  $Res call(
-      {String? code,
-      String? error,
-      String message,
-      String? details,
-      bool show});
+  $Res call({String message, bool show});
 }
 
 /// @nodoc
@@ -123,29 +119,14 @@ class _$NetworkFailureCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? code = freezed,
-    Object? error = freezed,
     Object? message = freezed,
-    Object? details = freezed,
     Object? show = freezed,
   }) {
     return _then(_value.copyWith(
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String?,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      details: details == freezed
-          ? _value.details
-          : details // ignore: cast_nullable_to_non_nullable
-              as String?,
       show: show == freezed
           ? _value.show
           : show // ignore: cast_nullable_to_non_nullable
@@ -161,12 +142,7 @@ abstract class _$NoInternetConnectivityCopyWith<$Res>
           $Res Function(_NoInternetConnectivity) then) =
       __$NoInternetConnectivityCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String? code,
-      String? error,
-      String message,
-      String? details,
-      bool show});
+  $Res call({String message, bool show});
 }
 
 /// @nodoc
@@ -182,29 +158,14 @@ class __$NoInternetConnectivityCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? code = freezed,
-    Object? error = freezed,
     Object? message = freezed,
-    Object? details = freezed,
     Object? show = freezed,
   }) {
     return _then(_NoInternetConnectivity(
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String?,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      details: details == freezed
-          ? _value.details
-          : details // ignore: cast_nullable_to_non_nullable
-              as String?,
       show: show == freezed
           ? _value.show
           : show // ignore: cast_nullable_to_non_nullable
@@ -217,45 +178,28 @@ class __$NoInternetConnectivityCopyWithImpl<$Res>
 
 class _$_NoInternetConnectivity extends _NoInternetConnectivity {
   const _$_NoInternetConnectivity(
-      {this.code,
-      this.error,
-      this.message = 'You are offline!',
-      this.details,
-      this.show = true})
+      {this.message = NetworkFailure._OFFLINE_MSG, this.show = true})
       : super._();
 
-  @override
-  final String? code;
-  @override
-  final String? error;
-  @JsonKey(defaultValue: 'You are offline!')
+  @JsonKey(defaultValue: NetworkFailure._OFFLINE_MSG)
   @override
   final String message;
-  @override
-  final String? details;
   @JsonKey(defaultValue: true)
   @override
   final bool show;
 
   @override
   String toString() {
-    return 'NetworkFailure.notConnected(code: $code, error: $error, message: $message, details: $details, show: $show)';
+    return 'NetworkFailure.notConnected(message: $message, show: $show)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _NoInternetConnectivity &&
-            (identical(other.code, code) ||
-                const DeepCollectionEquality().equals(other.code, code)) &&
-            (identical(other.error, error) ||
-                const DeepCollectionEquality().equals(other.error, error)) &&
             (identical(other.message, message) ||
                 const DeepCollectionEquality()
                     .equals(other.message, message)) &&
-            (identical(other.details, details) ||
-                const DeepCollectionEquality()
-                    .equals(other.details, details)) &&
             (identical(other.show, show) ||
                 const DeepCollectionEquality().equals(other.show, show)));
   }
@@ -263,10 +207,7 @@ class _$_NoInternetConnectivity extends _NoInternetConnectivity {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(code) ^
-      const DeepCollectionEquality().hash(error) ^
       const DeepCollectionEquality().hash(message) ^
-      const DeepCollectionEquality().hash(details) ^
       const DeepCollectionEquality().hash(show);
 
   @JsonKey(ignore: true)
@@ -278,29 +219,25 @@ class _$_NoInternetConnectivity extends _NoInternetConnectivity {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? code, String? error, String message,
-            String? details, bool show)
-        notConnected,
-    required TResult Function(String? code, String? error, String message,
-            String? details, bool show)
-        poorInternetConnection,
+    required TResult Function(String message, bool show) notConnected,
+    required TResult Function(String message, bool show) poorInternet,
+    required TResult Function(String message, bool show) receiveTimeout,
+    required TResult Function(String message, bool show) timeout,
   }) {
-    return notConnected(code, error, message, details, show);
+    return notConnected(message, show);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? code, String? error, String message,
-            String? details, bool show)?
-        notConnected,
-    TResult Function(String? code, String? error, String message,
-            String? details, bool show)?
-        poorInternetConnection,
+    TResult Function(String message, bool show)? notConnected,
+    TResult Function(String message, bool show)? poorInternet,
+    TResult Function(String message, bool show)? receiveTimeout,
+    TResult Function(String message, bool show)? timeout,
     required TResult orElse(),
   }) {
     if (notConnected != null) {
-      return notConnected(code, error, message, details, show);
+      return notConnected(message, show);
     }
     return orElse();
   }
@@ -309,8 +246,10 @@ class _$_NoInternetConnectivity extends _NoInternetConnectivity {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_NoInternetConnectivity value) notConnected,
-    required TResult Function(_PoorInternetConnection value)
-        poorInternetConnection,
+    required TResult Function(_PoorInternetConnection value) poorInternet,
+    required TResult Function(_NetworkFailureReceiveTimeout value)
+        receiveTimeout,
+    required TResult Function(_NetworkFailureTimeout value) timeout,
   }) {
     return notConnected(this);
   }
@@ -319,7 +258,9 @@ class _$_NoInternetConnectivity extends _NoInternetConnectivity {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_NoInternetConnectivity value)? notConnected,
-    TResult Function(_PoorInternetConnection value)? poorInternetConnection,
+    TResult Function(_PoorInternetConnection value)? poorInternet,
+    TResult Function(_NetworkFailureReceiveTimeout value)? receiveTimeout,
+    TResult Function(_NetworkFailureTimeout value)? timeout,
     required TResult orElse(),
   }) {
     if (notConnected != null) {
@@ -330,22 +271,12 @@ class _$_NoInternetConnectivity extends _NoInternetConnectivity {
 }
 
 abstract class _NoInternetConnectivity extends NetworkFailure {
-  const factory _NoInternetConnectivity(
-      {String? code,
-      String? error,
-      String message,
-      String? details,
-      bool show}) = _$_NoInternetConnectivity;
+  const factory _NoInternetConnectivity({String message, bool show}) =
+      _$_NoInternetConnectivity;
   const _NoInternetConnectivity._() : super._();
 
   @override
-  String? get code => throw _privateConstructorUsedError;
-  @override
-  String? get error => throw _privateConstructorUsedError;
-  @override
   String get message => throw _privateConstructorUsedError;
-  @override
-  String? get details => throw _privateConstructorUsedError;
   @override
   bool get show => throw _privateConstructorUsedError;
   @override
@@ -361,12 +292,7 @@ abstract class _$PoorInternetConnectionCopyWith<$Res>
           $Res Function(_PoorInternetConnection) then) =
       __$PoorInternetConnectionCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String? code,
-      String? error,
-      String message,
-      String? details,
-      bool show});
+  $Res call({String message, bool show});
 }
 
 /// @nodoc
@@ -382,29 +308,14 @@ class __$PoorInternetConnectionCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? code = freezed,
-    Object? error = freezed,
     Object? message = freezed,
-    Object? details = freezed,
     Object? show = freezed,
   }) {
     return _then(_PoorInternetConnection(
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String?,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      details: details == freezed
-          ? _value.details
-          : details // ignore: cast_nullable_to_non_nullable
-              as String?,
       show: show == freezed
           ? _value.show
           : show // ignore: cast_nullable_to_non_nullable
@@ -417,45 +328,28 @@ class __$PoorInternetConnectionCopyWithImpl<$Res>
 
 class _$_PoorInternetConnection extends _PoorInternetConnection {
   const _$_PoorInternetConnection(
-      {this.code,
-      this.error,
-      this.message = 'Poor Internet Connection!',
-      this.details,
-      this.show = true})
+      {this.message = NetworkFailure._POOR_INTERNET_MSG, this.show = true})
       : super._();
 
-  @override
-  final String? code;
-  @override
-  final String? error;
-  @JsonKey(defaultValue: 'Poor Internet Connection!')
+  @JsonKey(defaultValue: NetworkFailure._POOR_INTERNET_MSG)
   @override
   final String message;
-  @override
-  final String? details;
   @JsonKey(defaultValue: true)
   @override
   final bool show;
 
   @override
   String toString() {
-    return 'NetworkFailure.poorInternetConnection(code: $code, error: $error, message: $message, details: $details, show: $show)';
+    return 'NetworkFailure.poorInternet(message: $message, show: $show)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _PoorInternetConnection &&
-            (identical(other.code, code) ||
-                const DeepCollectionEquality().equals(other.code, code)) &&
-            (identical(other.error, error) ||
-                const DeepCollectionEquality().equals(other.error, error)) &&
             (identical(other.message, message) ||
                 const DeepCollectionEquality()
                     .equals(other.message, message)) &&
-            (identical(other.details, details) ||
-                const DeepCollectionEquality()
-                    .equals(other.details, details)) &&
             (identical(other.show, show) ||
                 const DeepCollectionEquality().equals(other.show, show)));
   }
@@ -463,10 +357,7 @@ class _$_PoorInternetConnection extends _PoorInternetConnection {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(code) ^
-      const DeepCollectionEquality().hash(error) ^
       const DeepCollectionEquality().hash(message) ^
-      const DeepCollectionEquality().hash(details) ^
       const DeepCollectionEquality().hash(show);
 
   @JsonKey(ignore: true)
@@ -478,29 +369,25 @@ class _$_PoorInternetConnection extends _PoorInternetConnection {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? code, String? error, String message,
-            String? details, bool show)
-        notConnected,
-    required TResult Function(String? code, String? error, String message,
-            String? details, bool show)
-        poorInternetConnection,
+    required TResult Function(String message, bool show) notConnected,
+    required TResult Function(String message, bool show) poorInternet,
+    required TResult Function(String message, bool show) receiveTimeout,
+    required TResult Function(String message, bool show) timeout,
   }) {
-    return poorInternetConnection(code, error, message, details, show);
+    return poorInternet(message, show);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? code, String? error, String message,
-            String? details, bool show)?
-        notConnected,
-    TResult Function(String? code, String? error, String message,
-            String? details, bool show)?
-        poorInternetConnection,
+    TResult Function(String message, bool show)? notConnected,
+    TResult Function(String message, bool show)? poorInternet,
+    TResult Function(String message, bool show)? receiveTimeout,
+    TResult Function(String message, bool show)? timeout,
     required TResult orElse(),
   }) {
-    if (poorInternetConnection != null) {
-      return poorInternetConnection(code, error, message, details, show);
+    if (poorInternet != null) {
+      return poorInternet(message, show);
     }
     return orElse();
   }
@@ -509,47 +396,344 @@ class _$_PoorInternetConnection extends _PoorInternetConnection {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_NoInternetConnectivity value) notConnected,
-    required TResult Function(_PoorInternetConnection value)
-        poorInternetConnection,
+    required TResult Function(_PoorInternetConnection value) poorInternet,
+    required TResult Function(_NetworkFailureReceiveTimeout value)
+        receiveTimeout,
+    required TResult Function(_NetworkFailureTimeout value) timeout,
   }) {
-    return poorInternetConnection(this);
+    return poorInternet(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_NoInternetConnectivity value)? notConnected,
-    TResult Function(_PoorInternetConnection value)? poorInternetConnection,
+    TResult Function(_PoorInternetConnection value)? poorInternet,
+    TResult Function(_NetworkFailureReceiveTimeout value)? receiveTimeout,
+    TResult Function(_NetworkFailureTimeout value)? timeout,
     required TResult orElse(),
   }) {
-    if (poorInternetConnection != null) {
-      return poorInternetConnection(this);
+    if (poorInternet != null) {
+      return poorInternet(this);
     }
     return orElse();
   }
 }
 
 abstract class _PoorInternetConnection extends NetworkFailure {
-  const factory _PoorInternetConnection(
-      {String? code,
-      String? error,
-      String message,
-      String? details,
-      bool show}) = _$_PoorInternetConnection;
+  const factory _PoorInternetConnection({String message, bool show}) =
+      _$_PoorInternetConnection;
   const _PoorInternetConnection._() : super._();
 
   @override
-  String? get code => throw _privateConstructorUsedError;
-  @override
-  String? get error => throw _privateConstructorUsedError;
-  @override
   String get message => throw _privateConstructorUsedError;
-  @override
-  String? get details => throw _privateConstructorUsedError;
   @override
   bool get show => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PoorInternetConnectionCopyWith<_PoorInternetConnection> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$NetworkFailureReceiveTimeoutCopyWith<$Res>
+    implements $NetworkFailureCopyWith<$Res> {
+  factory _$NetworkFailureReceiveTimeoutCopyWith(
+          _NetworkFailureReceiveTimeout value,
+          $Res Function(_NetworkFailureReceiveTimeout) then) =
+      __$NetworkFailureReceiveTimeoutCopyWithImpl<$Res>;
+  @override
+  $Res call({String message, bool show});
+}
+
+/// @nodoc
+class __$NetworkFailureReceiveTimeoutCopyWithImpl<$Res>
+    extends _$NetworkFailureCopyWithImpl<$Res>
+    implements _$NetworkFailureReceiveTimeoutCopyWith<$Res> {
+  __$NetworkFailureReceiveTimeoutCopyWithImpl(
+      _NetworkFailureReceiveTimeout _value,
+      $Res Function(_NetworkFailureReceiveTimeout) _then)
+      : super(_value, (v) => _then(v as _NetworkFailureReceiveTimeout));
+
+  @override
+  _NetworkFailureReceiveTimeout get _value =>
+      super._value as _NetworkFailureReceiveTimeout;
+
+  @override
+  $Res call({
+    Object? message = freezed,
+    Object? show = freezed,
+  }) {
+    return _then(_NetworkFailureReceiveTimeout(
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      show: show == freezed
+          ? _value.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_NetworkFailureReceiveTimeout extends _NetworkFailureReceiveTimeout {
+  const _$_NetworkFailureReceiveTimeout(
+      {this.message = NetworkFailure._RECEIVE_TIMEOUT_MSG, this.show = true})
+      : super._();
+
+  @JsonKey(defaultValue: NetworkFailure._RECEIVE_TIMEOUT_MSG)
+  @override
+  final String message;
+  @JsonKey(defaultValue: true)
+  @override
+  final bool show;
+
+  @override
+  String toString() {
+    return 'NetworkFailure.receiveTimeout(message: $message, show: $show)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _NetworkFailureReceiveTimeout &&
+            (identical(other.message, message) ||
+                const DeepCollectionEquality()
+                    .equals(other.message, message)) &&
+            (identical(other.show, show) ||
+                const DeepCollectionEquality().equals(other.show, show)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(message) ^
+      const DeepCollectionEquality().hash(show);
+
+  @JsonKey(ignore: true)
+  @override
+  _$NetworkFailureReceiveTimeoutCopyWith<_NetworkFailureReceiveTimeout>
+      get copyWith => __$NetworkFailureReceiveTimeoutCopyWithImpl<
+          _NetworkFailureReceiveTimeout>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message, bool show) notConnected,
+    required TResult Function(String message, bool show) poorInternet,
+    required TResult Function(String message, bool show) receiveTimeout,
+    required TResult Function(String message, bool show) timeout,
+  }) {
+    return receiveTimeout(message, show);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message, bool show)? notConnected,
+    TResult Function(String message, bool show)? poorInternet,
+    TResult Function(String message, bool show)? receiveTimeout,
+    TResult Function(String message, bool show)? timeout,
+    required TResult orElse(),
+  }) {
+    if (receiveTimeout != null) {
+      return receiveTimeout(message, show);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoInternetConnectivity value) notConnected,
+    required TResult Function(_PoorInternetConnection value) poorInternet,
+    required TResult Function(_NetworkFailureReceiveTimeout value)
+        receiveTimeout,
+    required TResult Function(_NetworkFailureTimeout value) timeout,
+  }) {
+    return receiveTimeout(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoInternetConnectivity value)? notConnected,
+    TResult Function(_PoorInternetConnection value)? poorInternet,
+    TResult Function(_NetworkFailureReceiveTimeout value)? receiveTimeout,
+    TResult Function(_NetworkFailureTimeout value)? timeout,
+    required TResult orElse(),
+  }) {
+    if (receiveTimeout != null) {
+      return receiveTimeout(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NetworkFailureReceiveTimeout extends NetworkFailure {
+  const factory _NetworkFailureReceiveTimeout({String message, bool show}) =
+      _$_NetworkFailureReceiveTimeout;
+  const _NetworkFailureReceiveTimeout._() : super._();
+
+  @override
+  String get message => throw _privateConstructorUsedError;
+  @override
+  bool get show => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$NetworkFailureReceiveTimeoutCopyWith<_NetworkFailureReceiveTimeout>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$NetworkFailureTimeoutCopyWith<$Res>
+    implements $NetworkFailureCopyWith<$Res> {
+  factory _$NetworkFailureTimeoutCopyWith(_NetworkFailureTimeout value,
+          $Res Function(_NetworkFailureTimeout) then) =
+      __$NetworkFailureTimeoutCopyWithImpl<$Res>;
+  @override
+  $Res call({String message, bool show});
+}
+
+/// @nodoc
+class __$NetworkFailureTimeoutCopyWithImpl<$Res>
+    extends _$NetworkFailureCopyWithImpl<$Res>
+    implements _$NetworkFailureTimeoutCopyWith<$Res> {
+  __$NetworkFailureTimeoutCopyWithImpl(_NetworkFailureTimeout _value,
+      $Res Function(_NetworkFailureTimeout) _then)
+      : super(_value, (v) => _then(v as _NetworkFailureTimeout));
+
+  @override
+  _NetworkFailureTimeout get _value => super._value as _NetworkFailureTimeout;
+
+  @override
+  $Res call({
+    Object? message = freezed,
+    Object? show = freezed,
+  }) {
+    return _then(_NetworkFailureTimeout(
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      show: show == freezed
+          ? _value.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_NetworkFailureTimeout extends _NetworkFailureTimeout {
+  const _$_NetworkFailureTimeout(
+      {this.message = NetworkFailure._CONNECT_TIMEOUT_MSG, this.show = true})
+      : super._();
+
+  @JsonKey(defaultValue: NetworkFailure._CONNECT_TIMEOUT_MSG)
+  @override
+  final String message;
+  @JsonKey(defaultValue: true)
+  @override
+  final bool show;
+
+  @override
+  String toString() {
+    return 'NetworkFailure.timeout(message: $message, show: $show)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _NetworkFailureTimeout &&
+            (identical(other.message, message) ||
+                const DeepCollectionEquality()
+                    .equals(other.message, message)) &&
+            (identical(other.show, show) ||
+                const DeepCollectionEquality().equals(other.show, show)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(message) ^
+      const DeepCollectionEquality().hash(show);
+
+  @JsonKey(ignore: true)
+  @override
+  _$NetworkFailureTimeoutCopyWith<_NetworkFailureTimeout> get copyWith =>
+      __$NetworkFailureTimeoutCopyWithImpl<_NetworkFailureTimeout>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message, bool show) notConnected,
+    required TResult Function(String message, bool show) poorInternet,
+    required TResult Function(String message, bool show) receiveTimeout,
+    required TResult Function(String message, bool show) timeout,
+  }) {
+    return timeout(message, show);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message, bool show)? notConnected,
+    TResult Function(String message, bool show)? poorInternet,
+    TResult Function(String message, bool show)? receiveTimeout,
+    TResult Function(String message, bool show)? timeout,
+    required TResult orElse(),
+  }) {
+    if (timeout != null) {
+      return timeout(message, show);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoInternetConnectivity value) notConnected,
+    required TResult Function(_PoorInternetConnection value) poorInternet,
+    required TResult Function(_NetworkFailureReceiveTimeout value)
+        receiveTimeout,
+    required TResult Function(_NetworkFailureTimeout value) timeout,
+  }) {
+    return timeout(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoInternetConnectivity value)? notConnected,
+    TResult Function(_PoorInternetConnection value)? poorInternet,
+    TResult Function(_NetworkFailureReceiveTimeout value)? receiveTimeout,
+    TResult Function(_NetworkFailureTimeout value)? timeout,
+    required TResult orElse(),
+  }) {
+    if (timeout != null) {
+      return timeout(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NetworkFailureTimeout extends NetworkFailure {
+  const factory _NetworkFailureTimeout({String message, bool show}) =
+      _$_NetworkFailureTimeout;
+  const _NetworkFailureTimeout._() : super._();
+
+  @override
+  String get message => throw _privateConstructorUsedError;
+  @override
+  bool get show => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$NetworkFailureTimeoutCopyWith<_NetworkFailureTimeout> get copyWith =>
       throw _privateConstructorUsedError;
 }

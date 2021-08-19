@@ -8,7 +8,7 @@ class DropdownFieldWidget<Model> extends StatelessWidget {
   final List<DropdownMenuItem<Model>> items;
   final String hint;
   final String disabledHint;
-  final Model selected;
+  final Model? selected;
   final bool validate;
   final bool disabled;
   final String? error;

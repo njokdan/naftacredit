@@ -46,7 +46,7 @@ class VerificationSucessScreen extends StatelessWidget with AutoRouteWrapper {
                     //
                     Flexible(
                       child: AutoSizeText(
-                        'Verification Successful',
+                        'Verification Complete',
                         softWrap: true,
                         maxLines: 1,
                         style: Theme.of(context).textTheme.headline5!.copyWith(

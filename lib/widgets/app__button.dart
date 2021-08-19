@@ -145,14 +145,13 @@ class AppButton extends StatelessWidget {
             replacement: child ?? const SizedBox(),
             child: AutoSizeText(
               text ?? '',
-              style: textStyle ??
-                  TextStyle(
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
-                    fontFamily: fontFamily,
-                    wordSpacing: wordSpacing,
-                    color: textColor ?? App.theme.colorScheme.secondary,
-                  ),
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                fontFamily: fontFamily,
+                wordSpacing: wordSpacing,
+                color: textColor ?? App.theme.colorScheme.secondary,
+              ).merge(textStyle),
             ),
           ),
         ),
@@ -171,14 +170,13 @@ class AppButton extends StatelessWidget {
             replacement: child ?? const SizedBox(),
             child: AutoSizeText(
               text ?? '',
-              style: textStyle ??
-                  TextStyle(
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
-                    fontFamily: fontFamily,
-                    wordSpacing: wordSpacing,
-                    color: textColor ?? App.theme.colorScheme.secondary,
-                  ),
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                fontFamily: fontFamily,
+                wordSpacing: wordSpacing,
+                color: textColor ?? App.theme.colorScheme.secondary,
+              ).merge(textStyle),
             ),
           ),
         ),
@@ -212,14 +210,13 @@ class AppButton extends StatelessWidget {
                   alignment: textAlignment,
                   child: AutoSizeText(
                     text ?? '',
-                    style: textStyle ??
-                        TextStyle(
-                          fontSize: fontSize,
-                          fontWeight: fontWeight,
-                          fontFamily: fontFamily,
-                          wordSpacing: wordSpacing,
-                          color: textColor,
-                        ),
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: fontWeight,
+                      fontFamily: fontFamily,
+                      wordSpacing: wordSpacing,
+                      color: textColor,
+                    ).merge(textStyle),
                   ),
                 ),
               ),
@@ -253,14 +250,13 @@ class AppButton extends StatelessWidget {
                   alignment: textAlignment,
                   child: AutoSizeText(
                     text ?? '',
-                    style: textStyle ??
-                        TextStyle(
-                          fontSize: fontSize,
-                          fontWeight: fontWeight,
-                          fontFamily: fontFamily,
-                          wordSpacing: wordSpacing,
-                          color: textColor,
-                        ),
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: fontWeight,
+                      fontFamily: fontFamily,
+                      wordSpacing: wordSpacing,
+                      color: textColor,
+                    ).merge(textStyle),
                   ),
                 ),
               ),

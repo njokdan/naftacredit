@@ -2,6 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:naftacredit/features/auth/presentation/managers/managers.dart';
+import 'package:naftacredit/features/auth/presentation/screens/index.dart';
+import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
 
@@ -11,7 +16,45 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return this;
+    return BlocProvider(
+      create: (_) => getIt<AccountVerificationCubit>()..init(),
+      child: BlocListener<AccountVerificationCubit, AccountVerificationState>(
+        listenWhen: (p, c) =>
+            p.status.getOrElse(() => null) != c.status.getOrElse(() => null) ||
+            (c.status.getOrElse(() => null) != null &&
+                (c.status.getOrElse(() => null)!.isLeft() &&
+                    c.status.getOrElse(() => null)!.fold(
+                          (f) => f.foldCode(
+                            // is1106: () => p.isLoading != c.isLoading,
+                            orElse: () => false,
+                          ),
+                          (_) => false,
+                        ))),
+        listener: (c, s) => s.status.fold(
+          () => null,
+          (e1) => e1?.fold(
+            (f) => PopupDialog.error(message: f.message).render(c),
+            (r) => PopupDialog.success(
+              message: r?.message,
+              listener: (_) => _?.fold(
+                dismissed: () => r?.fold(
+                  success: (p0) => p0.pop
+                      ? navigator.push(
+                          OTPVerificationRoute(
+                            bvn: s.bvn.getOrNull,
+                            title: 'BVN Verification',
+                            type: OTPVerificationScreenType.bvn,
+                          ),
+                        )
+                      : null,
+                ),
+              ),
+            ).render(c),
+          ),
+        ),
+        child: this,
+      ),
+    );
   }
 
   @override
@@ -23,7 +66,7 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
             padding: EdgeInsets.only(right: Helpers.appPadding),
             child: Center(
               child: AutoSizeText(
-                '3 of 3',
+                '1 of 3',
                 style: Theme.of(context).textTheme.headline6!.copyWith(),
               ),
             ),
@@ -44,7 +87,7 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
             children: [
               Flexible(
                 child: AutoSizeText(
-                  'Bank Verification',
+                  'BVN Verification',
                   softWrap: true,
                   maxLines: 1,
                   style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -62,8 +105,8 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
               //
               Flexible(
                 child: AutoSizeText(
-                  'Please provide your BVN details to help us qualify you for a loan.',
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                  'Please provide your BVN to help us qualify you for a loan.',
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
                         // color: Colors.grey.shade700,
                         fontSize: 16.0,
                         letterSpacing: Helpers.letterSpacing,
@@ -80,12 +123,33 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
                   children: [
                     const TextFormInputLabel(text: 'Enter your BVN'),
                     //
-                    const Flexible(
-                      child: AdaptiveTextFormInput(
-                        hintText: '012345678901',
-                        keyboardType: TextInputType.number,
-                        capitalization: TextCapitalization.none,
-                        action: TextInputAction.done,
+                    Flexible(
+                      child: BlocBuilder<AccountVerificationCubit,
+                          AccountVerificationState>(
+                        builder: (c, s) => AdaptiveTextFormInput(
+                          hintText: '12345678901',
+                          disabled: s.isLoading,
+                          validate: s.validate,
+                          keyboardType: TextInputType.number,
+                          capitalization: TextCapitalization.none,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(11),
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          action: TextInputAction.done,
+                          errorText: s.bvn.value.fold(
+                            (f) => f.message,
+                            (_) => s.status.fold(
+                              () => null,
+                              (a) => a?.fold(
+                                (f) => f.errors?.bvn?.firstOrNone,
+                                (r) => null,
+                              ),
+                            ),
+                          ),
+                          onChanged:
+                              c.read<AccountVerificationCubit>().bvnChanged,
+                        ),
                       ),
                     ),
                   ],
@@ -96,7 +160,10 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
               //
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xffF8FAFB),
+                  color: Helpers.foldTheme(
+                    light: () => Palette.primaryColor.shade300,
+                    dark: () => Palette.primaryColor.shade500,
+                  ),
                   borderRadius:
                       BorderRadius.circular(Helpers.inputBorderRadius),
                 ),
@@ -199,29 +266,35 @@ class BankBvnVerificationScreen extends StatelessWidget with AutoRouteWrapper {
               ),
               //
               Flexible(child: VerticalSpace(height: App.shortest * 0.2)),
-
               //
               Flexible(
-                child: AppButton(
-                  onPressed: () => navigator.popAndPush(
-                    BankOtpVerificationRoute(),
-                    // predicate: (_) => false,
+                child: BlocBuilder<AccountVerificationCubit,
+                    AccountVerificationState>(
+                  builder: (c, s) => Visibility(
+                    visible: !s.isLoading,
+                    replacement: App.loadingHourGlass,
+                    child: AppButton(
+                      // onPressed: () => ,
+                      onPressed: () => c
+                          .read<AccountVerificationCubit>()
+                          .resendBVNEmailOTP(),
+                      text: 'Get OTP',
+                      textColor: Colors.white,
+                      height: 30.0,
+                      backgroundColor: Helpers.foldTheme(
+                        light: () => Palette.accentColor,
+                        dark: () => Colors.transparent,
+                      ),
+                      splashColor: Helpers.foldTheme(
+                        light: () => Colors.white30,
+                        dark: () => Colors.grey.shade800,
+                      ),
+                      side: Helpers.foldTheme(
+                        light: () => null,
+                        dark: () => const BorderSide(color: Colors.white),
+                      ),
+                    ),
                   ),
-                  text: 'Verify BVN',
-                  textColor: Colors.white,
-                  backgroundColor: Helpers.foldTheme(
-                    light: () => Palette.accentColor,
-                    dark: () => Colors.transparent,
-                  ),
-                  splashColor: Helpers.foldTheme(
-                    light: () => Colors.white30,
-                    dark: () => Colors.grey.shade800,
-                  ),
-                  side: Helpers.foldTheme(
-                    light: () => null,
-                    dark: () => const BorderSide(color: Colors.white),
-                  ),
-                  height: 30.0,
                 ),
               ),
             ],

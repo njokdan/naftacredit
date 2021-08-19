@@ -3,22 +3,42 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:naftacredit/features/auth/presentation/managers/managers.dart';
+import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
 
 class SignupScreen extends StatelessWidget with AutoRouteWrapper {
-  final FocusNode firstNameFocus = FocusNode();
-  final FocusNode lastNameFocus = FocusNode();
-  final FocusNode emailFocus = FocusNode();
-  final FocusNode phoneFocus = FocusNode();
-  final FocusNode passwordFocus = FocusNode();
-  final FocusNode confirmPasswordFocus = FocusNode();
   final TapGestureRecognizer tapRecognizer = TapGestureRecognizer()
     ..onTap = (() => navigator.replace(const LoginRoute()));
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return this;
+    return BlocProvider(
+      create: (_) => getIt<AuthCubit>(),
+      child: BlocListener<AuthCubit, AuthState>(
+        listenWhen: (p, c) =>
+            p.status.getOrElse(() => null) != c.status.getOrElse(() => null) ||
+            (c.status.getOrElse(() => null) != null &&
+                (c.status.getOrElse(() => null)!.isLeft() &&
+                    c.status.getOrElse(() => null)!.fold(
+                          (f) => f.foldCode(
+                            // is1106: () => p.isLoading != c.isLoading,
+                            orElse: () => false,
+                          ),
+                          (_) => false,
+                        ))),
+        listener: (c, s) => s.status.fold(
+          () => null,
+          (th) => th?.fold(
+            (f) => PopupDialog.error(message: f.message).render(c),
+            (r) => PopupDialog.success(message: r?.message).render(c),
+          ),
+        ),
+        child: this,
+      ),
+    );
   }
 
   @override
@@ -32,7 +52,7 @@ class SignupScreen extends StatelessWidget with AutoRouteWrapper {
         physics: Helpers.physics,
         padding: EdgeInsets.symmetric(
           horizontal: Helpers.appPadding,
-        ).copyWith(top: App.longest * 0.03),
+        ).copyWith(top: App.longest * 0.02),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -41,6 +61,8 @@ class SignupScreen extends StatelessWidget with AutoRouteWrapper {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Flexible(child: VerticalSpace(height: App.shortest * 0.05)),
+                  //
                   Flexible(
                     child: AutoSizeText(
                       'Create an Account',
@@ -51,8 +73,9 @@ class SignupScreen extends StatelessWidget with AutoRouteWrapper {
                               light: () => Palette.accentColor,
                               dark: () => Palette.accentColor.shade50,
                             ),
-                            fontSize: 27.0,
+                            fontSize: 24.0,
                             fontWeight: FontWeight.w700,
+                            letterSpacing: 0.96,
                           ),
                     ),
                   ),
@@ -61,184 +84,305 @@ class SignupScreen extends StatelessWidget with AutoRouteWrapper {
                   //
                   Flexible(
                     child: AutoSizeText(
-                      'Provide your basic user information so you can get started with accessing loans.',
+                      'Provide your basic user information '
+                      'so you can get started with accessing loans.',
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             // color: Colors.grey.shade700,
                             fontSize: 16.0,
-                            letterSpacing: Helpers.letterSpacing,
+                            letterSpacing: Helpers.labelLetterSpacing,
                           ),
                     ),
                   ),
                   //
                   Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
                   //
-                  Flexible(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const TextFormInputLabel(text: 'First Name'),
-                              //
-                              Flexible(
-                                child: AdaptiveTextFormInput(
-                                  hintText: 'John',
-                                  keyboardType: TextInputType.name,
-                                  capitalization: TextCapitalization.words,
-                                  autoFillHints: [
-                                    AutofillHints.name,
-                                    AutofillHints.givenName,
-                                    // AutofillHints.familyName,
-                                    AutofillHints.middleName,
-                                  ],
-                                  focus: firstNameFocus,
-                                  next: lastNameFocus,
+                  BlocBuilder<AuthCubit, AuthState>(
+                    builder: (c, s) => Form(
+                      autovalidateMode: s.validate
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const TextFormInputLabel(
+                                        text: 'First Name',
+                                        letterSpacing:
+                                            Helpers.labelLetterSpacing,
+                                      ),
+                                      //
+                                      Flexible(
+                                        child: AdaptiveTextFormInput(
+                                          hintText: 'John',
+                                          keyboardType: TextInputType.name,
+                                          disabled: s.isLoading,
+                                          capitalization:
+                                              TextCapitalization.words,
+                                          autoFillHints: [
+                                            AutofillHints.name,
+                                            AutofillHints.givenName,
+                                            AutofillHints.familyName,
+                                            AutofillHints.middleName,
+                                          ],
+                                          focus: AuthState.firstNameFocus,
+                                          next: AuthState.lastNameFocus,
+                                          validate: s.validate,
+                                          errorText:
+                                              s.user.firstName.value.fold(
+                                            (f) => f.message,
+                                            (_) => null,
+                                          ),
+                                          onChanged: c
+                                              .read<AuthCubit>()
+                                              .firstNameChanged,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                //
+                                HorizontalSpace(width: App.shortest * 0.05),
+                                //
+                                Flexible(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const TextFormInputLabel(
+                                        text: 'Last Name',
+                                        letterSpacing:
+                                            Helpers.labelLetterSpacing,
+                                      ),
+                                      //
+                                      Flexible(
+                                        child: AdaptiveTextFormInput(
+                                          hintText: 'Doe',
+                                          disabled: s.isLoading,
+                                          keyboardType: TextInputType.name,
+                                          capitalization:
+                                              TextCapitalization.words,
+                                          autoFillHints: [
+                                            AutofillHints.name,
+                                            AutofillHints.familyName,
+                                          ],
+                                          focus: AuthState.lastNameFocus,
+                                          next: AuthState.emailFocus,
+                                          validate: s.validate,
+                                          errorText: s.user.lastName.value.fold(
+                                            (f) => f.message,
+                                            (_) => null,
+                                          ),
+                                          onChanged: c
+                                              .read<AuthCubit>()
+                                              .lastNameChanged,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          //
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.03),
+                          ),
+                          //
+                          const TextFormInputLabel(
+                            text: 'Email Address',
+                            letterSpacing: Helpers.labelLetterSpacing,
+                          ),
+                          //
+                          Flexible(
+                            child: AdaptiveTextFormInput(
+                              hintText: 'johndoe@email.com',
+                              disabled: s.isLoading,
+                              keyboardType: TextInputType.emailAddress,
+                              autoFillHints: [AutofillHints.email],
+                              focus: AuthState.emailFocus,
+                              next: AuthState.passwordFocus,
+                              validate: s.validate,
+                              errorText: s.user.email.value.fold(
+                                (f) => f.message,
+                                (_) => s.status.fold(
+                                  () => null,
+                                  (a) => a?.fold(
+                                    (f) => f.errors?.email?.firstOrNone,
+                                    (_) => null,
+                                  ),
                                 ),
                               ),
-                            ],
+                              onChanged: c.read<AuthCubit>().emailChanged,
+                            ),
                           ),
-                        ),
-                        //
-                        HorizontalSpace(width: App.shortest * 0.05),
-                        //
-                        Flexible(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const TextFormInputLabel(text: 'Last Name'),
-                              //
-                              Flexible(
-                                child: AdaptiveTextFormInput(
-                                  hintText: 'Doe',
-                                  keyboardType: TextInputType.name,
-                                  capitalization: TextCapitalization.words,
-                                  autoFillHints: [AutofillHints.familyName],
-                                  focus: lastNameFocus,
-                                  next: emailFocus,
-                                ),
+                          //
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.03),
+                          ),
+                          //
+                          const TextFormInputLabel(
+                            text: 'Password',
+                            letterSpacing: Helpers.labelLetterSpacing,
+                          ),
+                          //
+                          Flexible(
+                            child: AdaptiveTextFormInput(
+                              enableSuggestions: false,
+                              autoCorrect: false,
+                              disabled: s.isLoading,
+                              obscureText: s.isPasswordHidden,
+                              focus: AuthState.passwordFocus,
+                              next: AuthState.confirmPasswordFocus,
+                              validate: s.validate,
+                              autoFillHints: [
+                                AutofillHints.newPassword,
+                                AutofillHints.password,
+                              ],
+                              errorText: s.user.password.value.fold(
+                                (f) => f.message,
+                                (_) => null,
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //
-                  Flexible(child: VerticalSpace(height: App.shortest * 0.03)),
-                  //
-                  const TextFormInputLabel(text: 'Email Address'),
-                  //
-                  Flexible(
-                    child: AdaptiveTextFormInput(
-                      hintText: 'johndoe@email.com',
-                      keyboardType: TextInputType.emailAddress,
-                      autoFillHints: [AutofillHints.email],
-                      focus: emailFocus,
-                      next: phoneFocus,
-                    ),
-                  ),
-                  //
-                  Flexible(child: VerticalSpace(height: App.shortest * 0.03)),
-                  //
-                  const TextFormInputLabel(text: 'Phone Number'),
-                  //
-                  Flexible(
-                    child: AdaptiveTextFormInput(
-                      hintText: '08123456789',
-                      maxLength: 11,
-                      maxLengthEnforced: true,
-                      keyboardType: TextInputType.phone,
-                      autoFillHints: [
-                        AutofillHints.telephoneNumber,
-                        AutofillHints.telephoneNumberLocal,
-                        AutofillHints.telephoneNumberNational,
-                      ],
-                      focus: phoneFocus,
-                      next: passwordFocus,
-                    ),
-                  ),
-                  //
-                  const TextFormInputLabel(text: 'Password'),
-                  //
-                  Flexible(
-                    child: AdaptiveTextFormInput(
-                      enableSuggestions: false,
-                      autoCorrect: false,
-                      obscureText: true,
-                      focus: passwordFocus,
-                      next: confirmPasswordFocus,
-                      autoFillHints: [
-                        AutofillHints.newPassword,
-                        AutofillHints.password,
-                      ],
-                      decoration: InputDecoration(
-                        hintText: 'secret',
-                        suffixIcon: Material(
-                          color: Colors.transparent,
-                          shape: const CircleBorder(),
-                          clipBehavior: Clip.hardEdge,
-                          child: IconButton(
-                            icon: Icon(
-                              AppIcons.eyelash_open,
-                              color: Helpers.computeLuminance(
-                                Theme.of(context).scaffoldBackgroundColor,
+                              onChanged: c.read<AuthCubit>().passwordChanged,
+                              decoration: InputDecoration(
+                                hintText: 'secret',
+                                suffixIcon: Material(
+                                  color: Colors.transparent,
+                                  shape: const CircleBorder(),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      s.isPasswordHidden
+                                          ? AppIcons.eyelash_open
+                                          : AppIcons.eyelash_closed,
+                                      color: Helpers.computeLuminance(
+                                        Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                    ),
+                                    onPressed: c
+                                        .read<AuthCubit>()
+                                        .togglePasswordVisibility,
+                                  ),
+                                ),
                               ),
                             ),
-                            onPressed: () {
-                              log.wtf('hello clicked');
-                            },
                           ),
-                        ),
+                          //
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.02),
+                          ),
+                          //
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: App.shortest * 0.4,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(100.0),
+                                ),
+                                child: LinearProgressIndicator(
+                                  value: s.passwordStrength,
+                                  semanticsLabel: s.passwordStrength.toString(),
+                                  color: s.strength(
+                                    low: Palette.errorRed,
+                                    medium: Palette.yellow,
+                                    perfect: Palette.successGreen,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          //
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.03),
+                          ),
+                          //
+                          const TextFormInputLabel(
+                            text: 'Retype Password',
+                            letterSpacing: Helpers.labelLetterSpacing,
+                          ),
+                          //
+                          Flexible(
+                            child: AdaptiveTextFormInput(
+                              enableSuggestions: false,
+                              autoCorrect: false,
+                              disabled: s.isLoading,
+                              obscureText: s.isPasswordHidden,
+                              focus: AuthState.confirmPasswordFocus,
+                              validate: s.validate,
+                              autoFillHints: [
+                                AutofillHints.password,
+                              ],
+                              errorText: s.passwordConfirmation.value.fold(
+                                (f) => f.message,
+                                (_) => null,
+                              ),
+                              onChanged: c
+                                  .read<AuthCubit>()
+                                  .passwordConfirmationChanged,
+                              decoration: InputDecoration(
+                                hintText: '*********',
+                                suffixIcon: Visibility(
+                                  visible: s.passwordConfirmation.isValid,
+                                  child: Icon(
+                                    s.passwordMatches
+                                        ? Icons.check_circle
+                                        : Icons.cancel_rounded,
+                                    color: s.passwordMatches
+                                        ? Palette.successGreen
+                                        : Palette.errorRed,
+                                    size: 25,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          //
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.15),
+                          ),
+                          //
+                          Flexible(
+                            child: Visibility(
+                              visible: !s.isLoading,
+                              replacement: App.loadingHourGlass,
+                              child: AppButton(
+                                onPressed: c.read<AuthCubit>().createAccount,
+                                text: 'Create Account',
+                                textColor: Colors.white,
+                                backgroundColor: Helpers.foldTheme(
+                                  light: () => Palette.accentColor,
+                                  dark: () => Colors.transparent,
+                                ),
+                                splashColor: Helpers.foldTheme(
+                                  light: () => Colors.white30,
+                                  dark: () => Colors.grey.shade800,
+                                ),
+                                side: Helpers.foldTheme(
+                                  light: () => null,
+                                  dark: () => const BorderSide(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                height: 30.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  //
-                  Flexible(child: VerticalSpace(height: App.shortest * 0.03)),
-                  //
-                  const TextFormInputLabel(text: 'Retype Password'),
-                  //
-                  Flexible(
-                    child: AdaptiveTextFormInput(
-                      enableSuggestions: false,
-                      autoCorrect: false,
-                      obscureText: true,
-                      focus: confirmPasswordFocus,
-                      autoFillHints: [
-                        AutofillHints.password,
-                      ],
-                      hintText: '*********',
-                    ),
-                  ),
-                  //
-                  Flexible(child: VerticalSpace(height: App.shortest * 0.15)),
-                  //
-                  Flexible(
-                    child: AppButton(
-                      onPressed: () => navigator.popAndPush(
-                        const EmailVerificationRoute(),
-                        // predicate: (_) => false,
-                      ),
-                      text: 'Create Account',
-                      textColor: Colors.white,
-                      backgroundColor: Helpers.foldTheme(
-                        light: () => Palette.accentColor,
-                        dark: () => Colors.transparent,
-                      ),
-                      splashColor: Helpers.foldTheme(
-                        light: () => Colors.white30,
-                        dark: () => Colors.grey.shade800,
-                      ),
-                      side: Helpers.foldTheme(
-                        light: () => null,
-                        dark: () => const BorderSide(color: Colors.white),
-                      ),
-                      height: 30.0,
-                    ),
-                  ),
+                  )
                 ],
               ),
             ),

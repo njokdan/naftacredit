@@ -154,10 +154,11 @@ class OnBoardingItemBuilder extends StatelessWidget {
       height: double.infinity,
       child: Stack(
         children: [
-          // Positioned.fill(
-          //   top: App.longest * 0.12,
-          //   child: SvgPicture.asset(AppAssets.logo),
-          // ),
+          Positioned.fill(
+            top: App.longest * 0.1,
+            child: Image.asset(item!.image),
+          ),
+          //
           Positioned(
             top: App.longest * 0.62,
             left: 0,

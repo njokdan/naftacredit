@@ -3,9 +3,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:naftacredit/features/auth/presentation/managers/managers.dart';
+import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/palette.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
+import 'package:pixel_perfect/pixel_perfect.dart';
 
 class LoginScreen extends StatelessWidget with AutoRouteWrapper {
   final FocusNode emailFocus = FocusNode();
@@ -15,7 +19,30 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return this;
+    return BlocProvider(
+      create: (_) => getIt<AuthCubit>(),
+      child: BlocListener<AuthCubit, AuthState>(
+        listenWhen: (p, c) =>
+            p.status.getOrElse(() => null) != c.status.getOrElse(() => null) ||
+            (c.status.getOrElse(() => null) != null &&
+                (c.status.getOrElse(() => null)!.isLeft() &&
+                    c.status.getOrElse(() => null)!.fold(
+                          (f) => f.foldCode(
+                            // is1106: () => p.isLoading != c.isLoading,
+                            orElse: () => false,
+                          ),
+                          (_) => false,
+                        ))),
+        listener: (c, s) => s.status.fold(
+          () => null,
+          (th) => th?.fold(
+            (f) => PopupDialog.error(message: f.message).render(c),
+            (r) => PopupDialog.success(message: r?.message).render(c),
+          ),
+        ),
+        child: this,
+      ),
+    );
   }
 
   @override
@@ -29,7 +56,7 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
         physics: Helpers.physics,
         padding: EdgeInsets.symmetric(
           horizontal: Helpers.appPadding,
-        ).copyWith(top: App.longest * 0.03),
+        ).copyWith(top: App.longest * 0.02),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -38,6 +65,8 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Flexible(child: VerticalSpace(height: App.shortest * 0.05)),
+                  //
                   Flexible(
                     child: AutoSizeText(
                       'Welcome Back',
@@ -48,8 +77,9 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
                               light: () => Palette.accentColor,
                               dark: () => Palette.accentColor.shade50,
                             ),
-                            fontSize: 27.0,
+                            fontSize: 24.0,
                             fontWeight: FontWeight.w700,
+                            letterSpacing: 0.96,
                           ),
                     ),
                   ),
@@ -63,52 +93,92 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             // color: Colors.grey.shade700,
                             fontSize: 16.0,
-                            letterSpacing: Helpers.letterSpacing,
+                            letterSpacing: Helpers.labelLetterSpacing,
                           ),
                     ),
                   ),
                   //
-                  Flexible(child: VerticalSpace(height: App.shortest * 0.04)),
-                  //
-                  const TextFormInputLabel(text: 'Email Address'),
-                  //
-                  AdaptiveTextFormInput(
-                    hintText: 'johndoe@email.com',
-                    keyboardType: TextInputType.emailAddress,
-                    autoFillHints: [AutofillHints.email],
-                    focus: emailFocus,
-                    next: passwordFocus,
-                  ),
-                  //
-                  Flexible(child: VerticalSpace(height: App.shortest * 0.03)),
-                  //
-                  const TextFormInputLabel(text: 'Password'),
-                  //
-                  AdaptiveTextFormInput(
-                    enableSuggestions: false,
-                    autoCorrect: false,
-                    obscureText: true,
-                    autoFillHints: [
-                      AutofillHints.newPassword,
-                      AutofillHints.password,
-                    ],
-                    decoration: InputDecoration(
-                      hintText: 'secret',
-                      suffixIcon: Material(
-                        color: Colors.transparent,
-                        shape: const CircleBorder(),
-                        clipBehavior: Clip.hardEdge,
-                        child: IconButton(
-                          icon: Icon(
-                            AppIcons.eyelash_open,
-                            color: Helpers.computeLuminance(
-                              Theme.of(context).scaffoldBackgroundColor,
+                  BlocBuilder<AuthCubit, AuthState>(
+                    builder: (c, s) => Form(
+                      autovalidateMode: s.validate
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.04),
+                          ),
+                          //
+                          const TextFormInputLabel(
+                            text: 'Email Address',
+                            letterSpacing: Helpers.labelLetterSpacing,
+                          ),
+                          //
+                          AdaptiveTextFormInput(
+                            hintText: 'johndoe@email.com',
+                            disabled: s.isLoading,
+                            validate: s.validate,
+                            keyboardType: TextInputType.emailAddress,
+                            autoFillHints: [AutofillHints.email],
+                            focus: AuthState.emailFocus,
+                            next: AuthState.passwordFocus,
+                            errorText: s.user.email.value.fold(
+                              (f) => f.message,
+                              (_) => null,
+                            ),
+                            onChanged: c.read<AuthCubit>().emailChanged,
+                          ),
+                          //
+                          Flexible(
+                            child: VerticalSpace(height: App.shortest * 0.03),
+                          ),
+                          //
+                          const TextFormInputLabel(
+                            text: 'Password',
+                            letterSpacing: Helpers.labelLetterSpacing,
+                          ),
+                          //
+                          AdaptiveTextFormInput(
+                            enableSuggestions: false,
+                            autoCorrect: false,
+                            disabled: s.isLoading,
+                            validate: s.validate,
+                            obscureText: s.isPasswordHidden,
+                            focus: AuthState.passwordFocus,
+                            autoFillHints: [
+                              AutofillHints.newPassword,
+                              AutofillHints.password,
+                            ],
+                            errorText: s.user.password.value.fold(
+                              (f) => f.message,
+                              (_) => null,
+                            ),
+                            onChanged: c.read<AuthCubit>().passwordChanged,
+                            decoration: InputDecoration(
+                              hintText: 'secret',
+                              suffixIcon: Material(
+                                color: Colors.transparent,
+                                shape: const CircleBorder(),
+                                clipBehavior: Clip.hardEdge,
+                                child: IconButton(
+                                  icon: Icon(
+                                    s.isPasswordHidden
+                                        ? AppIcons.eyelash_open
+                                        : AppIcons.eyelash_closed,
+                                    color: Helpers.computeLuminance(
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                    ),
+                                  ),
+                                  onPressed: c
+                                      .read<AuthCubit>()
+                                      .togglePasswordVisibility,
+                                ),
+                              ),
                             ),
                           ),
-                          onPressed: () {
-                            log.wtf('hello clicked');
-                          },
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -128,28 +198,38 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
                         dark: () => Colors.white60,
                       ),
                       textAlign: TextAlign.end,
+                      letterSpacing: Helpers.labelLetterSpacing,
                     ),
                   ),
                   //
                   Flexible(child: VerticalSpace(height: App.shortest * 0.15)),
                   //
-                  AppButton(
-                    onPressed: () {},
-                    text: 'Login',
-                    textColor: Colors.white,
-                    backgroundColor: Helpers.foldTheme(
-                      light: () => Palette.accentColor,
-                      dark: () => Colors.transparent,
+                  BlocBuilder<AuthCubit, AuthState>(
+                    builder: (c, s) => Visibility(
+                      visible: !s.isLoading,
+                      replacement: App.loadingHourGlass,
+                      child: AppButton(
+                        onPressed: context.read<AuthCubit>().login,
+                        text: 'Login',
+                        textColor: Colors.white,
+                        textStyle: const TextStyle(
+                          letterSpacing: Helpers.labelLetterSpacing,
+                        ),
+                        backgroundColor: Helpers.foldTheme(
+                          light: () => Palette.accentColor,
+                          dark: () => Colors.transparent,
+                        ),
+                        splashColor: Helpers.foldTheme(
+                          light: () => Colors.white30,
+                          dark: () => Colors.grey.shade800,
+                        ),
+                        side: Helpers.foldTheme(
+                          light: () => null,
+                          dark: () => const BorderSide(color: Colors.white),
+                        ),
+                        height: 30.0,
+                      ),
                     ),
-                    splashColor: Helpers.foldTheme(
-                      light: () => Colors.white30,
-                      dark: () => Colors.grey.shade800,
-                    ),
-                    side: Helpers.foldTheme(
-                      light: () => null,
-                      dark: () => const BorderSide(color: Colors.white),
-                    ),
-                    height: 30.0,
                   ),
                 ],
               ),
@@ -179,6 +259,7 @@ class LoginScreen extends StatelessWidget with AutoRouteWrapper {
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       fontSize: 17.0,
                       fontWeight: FontWeight.w400,
+                      letterSpacing: Helpers.labelLetterSpacing,
                     ),
                 textAlign: TextAlign.center,
               ),

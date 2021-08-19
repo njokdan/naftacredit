@@ -1,3 +1,4 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inflection3/inflection3.dart' as _l1;
 import 'package:intl/intl.dart';
 
@@ -18,6 +19,10 @@ extension StringX on String {
     var lowB = b.toLowerCase();
     return lowA.contains(lowB) || lowB.contains(lowA);
   }
+
+  bool equals(String? other) =>
+      identical(this, other) ||
+      const DeepCollectionEquality().equals(this, other);
 
   /// Erase occurrence of strings matching Patterns
   String erase(List<Pattern> patterns,

@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -35,5 +37,15 @@ void main() async {
     log.e('Error initializing HydratedStorage', e, trace);
   }
 
-  runApp(const Naftacredit());
+  runApp(DevicePreview(
+    enabled: env.flavor.fold(
+      prod: () => !kReleaseMode,
+      dev: () => true,
+    ),
+    style: DevicePreviewStyle(
+      background: const BoxDecoration(color: Colors.transparent),
+      toolBar: DevicePreviewToolBarStyle.light(),
+    ),
+    builder: (_) => const Naftacredit(),
+  ));
 }

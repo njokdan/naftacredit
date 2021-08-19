@@ -11,9 +11,7 @@ class VerifyPromptScreen extends StatelessWidget with AutoRouteWrapper {
   const VerifyPromptScreen({Key? key}) : super(key: key);
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return this;
-  }
+  Widget wrappedRoute(BuildContext context) => this;
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +117,9 @@ class VerifyPromptScreen extends StatelessWidget with AutoRouteWrapper {
                   Flexible(child: VerticalSpace(height: App.shortest * 0.1)),
                   //
                   AppButton(
-                    onPressed: () => navigator.popAndPush(
-                      VerifyPersonalInformationRoute(),
+                    onPressed: () => navigator.pushAndPopUntil(
+                      const BankBvnVerificationRoute(),
+                      predicate: (_) => false,
                     ),
                     text: 'Verify my ID',
                     textColor: Colors.white,
