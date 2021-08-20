@@ -96,7 +96,7 @@ class VerificationSucessScreen extends StatelessWidget with AutoRouteWrapper {
               ),
               child: AppButton(
                 onPressed: () => navigator.pushAndPopUntil(
-                  DashboardRoute(),
+                  const DashboardRoute(),
                   predicate: (_) => false,
                 ),
                 text: 'Get Inside',

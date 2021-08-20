@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     predicate: (_) => false,
                   ),
                   (_) => navigator.pushAndPopUntil(
-                    DashboardRoute(),
+                    const DashboardRoute(),
                     predicate: (_) => false,
                   ),
                 ),

@@ -9,7 +9,6 @@ import 'package:naftacredit/manager/locator/locator.dart';
 import 'package:naftacredit/utils/palette.dart';
 import 'package:naftacredit/utils/utils.dart';
 import 'package:naftacredit/widgets/widgets.dart';
-import 'package:pixel_perfect/pixel_perfect.dart';
 
 class LoginScreen extends StatelessWidget with AutoRouteWrapper {
   final FocusNode emailFocus = FocusNode();

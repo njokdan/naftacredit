@@ -299,7 +299,7 @@ class UploadIdentificationScreen extends StatelessWidget with AutoRouteWrapper {
                     //
                     AppButton(
                       onPressed: () => navigator.pushAndPopUntil(
-                        DashboardRoute(),
+                        const DashboardRoute(),
                         predicate: (_) => false,
                       ),
                       text: 'Skip for now',
