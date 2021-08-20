@@ -26,6 +26,12 @@ mixin EndPoints {
   //.....///.....// UPDATE PROFILE ENDPOINTS ....////././//...//
   static const String SETUP_PERSONAL_PROFILE = '/user/verify/personal-info';
 
+  //.....///.....// WALLET ENDPOINTS ....////././//...//
+  static const String ADD_TO_WALLET_FROM_BANK = '/wallet/bank/credit';
+  static const String ADD_TO_WALLET_FROM_CREDIT_CARD = '/wallet/bank/card';
+  static const String CONFIRM_ADD_FROM_BANK = '/wallet/bank/credit/confirm';
+  static const String RETRIEVE_USERS_TRANSACTIONS = '/user/transactions';
+
   //.....///.....// ALT ENDPOINTS ....////././//...//
   static const String COUNTRIES = '/countries';
   static const String BANKS = '/banks';

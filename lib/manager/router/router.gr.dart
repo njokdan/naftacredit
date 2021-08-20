@@ -168,6 +168,7 @@ class AppRouter extends _i1.RootStackRouter {
             path: '/verification-sucess-screen', fullMatch: true),
         _i1.RouteConfig(DashboardRoute.name,
             path: 'bottom-navigation',
+            fullMatch: true,
             children: [
               _i1.RouteConfig(HomeRouter.name, path: 'home', children: [
                 _i1.RouteConfig(HomePage.name, path: ''),

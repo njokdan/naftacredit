@@ -39,13 +39,15 @@ import 'package:naftacredit/features/core/data/repositories/alt_repository.dart'
     as _i22;
 import 'package:naftacredit/features/core/presentation/managers/network/network_cubit.dart'
     as _i11;
+import 'package:naftacredit/features/home/data/repositories/wallet_repository.dart'
+    as _i28;
 import 'package:naftacredit/features/onborading/presentation/managers/onboarding/onboarding_cubit.dart'
     as _i12;
-import 'package:naftacredit/manager/locator/modules/modules.dart' as _i30;
+import 'package:naftacredit/manager/locator/modules/modules.dart' as _i31;
 import 'package:naftacredit/manager/settings/external/preference_repository.dart'
-    as _i28;
-import 'package:naftacredit/manager/settings/manager/global_app_preference_cubit.dart'
     as _i29;
+import 'package:naftacredit/manager/settings/manager/global_app_preference_cubit.dart'
+    as _i30;
 import 'package:naftacredit/manager/theme/manager/theme_cubit.dart' as _i14;
 import 'package:sembast/sembast.dart' as _i4;
 import 'package:shared_preferences/shared_preferences.dart'
@@ -95,24 +97,26 @@ extension GetItInjectableX on _i1.GetIt {
     gh.singleton<_i25.AppHttpClient>(serviceModules.httpClient);
     gh.singleton<_i26.Dio>(serviceModules.dio);
     gh.singleton<_i27.UserDAO>(_i27.UserDAO());
+    gh.singleton<_i28.WalletRepository>(
+        _i28.WalletRepository(get<_i25.AppHttpClient>()));
     gh.singleton<_i21.AccountVerificationRepository>(
         _i21.AccountVerificationRepository(get<_i25.AppHttpClient>()));
     gh.singleton<_i22.AltRepository>(
         _i22.AltRepository(get<_i25.AppHttpClient>()));
     gh.singleton<_i17.AuthRemoteDatasource>(
         _i17.AuthRemoteDatasource(get<_i26.Dio>()));
-    gh.singleton<_i28.PreferenceRepository>(
-        _i28.PreferenceRepository(get<_i13.SharedPreferences>()));
+    gh.singleton<_i29.PreferenceRepository>(
+        _i29.PreferenceRepository(get<_i13.SharedPreferences>()));
     gh.singleton<_i18.AuthLocalDatasource>(_i18.AuthLocalDatasource(
         get<_i24.AccessTokenManager>(),
         get<_i27.UserDAO>(),
-        get<_i28.PreferenceRepository>()));
-    gh.singleton<_i29.GlobalAppPreferenceCubit>(
-        _i29.GlobalAppPreferenceCubit(get<_i28.PreferenceRepository>()));
+        get<_i29.PreferenceRepository>()));
+    gh.singleton<_i30.GlobalAppPreferenceCubit>(
+        _i30.GlobalAppPreferenceCubit(get<_i29.PreferenceRepository>()));
     return this;
   }
 }
 
-class _$ServiceModules extends _i30.ServiceModules {}
+class _$ServiceModules extends _i31.ServiceModules {}
 
-class _$Modules extends _i30.Modules {}
+class _$Modules extends _i31.Modules {}
