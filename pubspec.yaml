@@ -25,14 +25,14 @@ dependencies:
   ###
   ### Firebase Packages ###
   ###
-  firebase_core: ^1.2.1
+  firebase_core: ^1.5.0
   # A Flutter plugin to use the Google Analytics for Firebase API.
-  firebase_analytics: ^8.1.1
+  firebase_analytics: ^8.3.0
   # Crashlytics helps you to collect analytics and
   # details about crashes and errors that occur in your app.
-  firebase_crashlytics: "^2.0.4"
+  firebase_crashlytics: ^2.2.0
   # Google services & Authentication
-  google_sign_in: ^5.0.4
+  # google_sign_in: ^5.0.4
   # Customize App font
   google_fonts: ^2.1.0
   # Flutter Plugin to login via Facebook.
@@ -42,9 +42,9 @@ dependencies:
   # and configure themselves accordingly.
   connectivity: ^3.0.6
   # Check Internet connectivity
-  internet_connection_checker: ^0.0.1+1
+  internet_connection_checker: ^0.0.1+2
   # Service locator
-  get_it: ^7.1.3
+  get_it: ^7.2.0
   # A powerful Http client for Dart, which supports Interceptors,
   # Global configuration, FormData, Request Cancellation, File downloading, Timeout etc.
   dio: ^4.0.0
@@ -56,28 +56,28 @@ dependencies:
   # to make improvements that would be otherwise impossible.
   # flutter_riverpod: ^0.12.4
   # Flutter BloC for state management
-  flutter_bloc: ^7.0.1
+  flutter_bloc: ^7.1.0
   # Automatically persists and restores bloc states
   hydrated_bloc: ^7.0.1
   # A lightweight and blazing fast key-value database written in pure Dart.
-  hive_flutter: ^1.0.0
+  hive_flutter: ^1.1.0
   # Provides:
   # - Immutable value types
   # - EnumClass, classes that behave like enums
   # - JSON serialization
-  built_value: ^8.0.6
+  built_value: ^8.1.2
   # Provides: Immutable collections
-  built_collection: ^5.0.0
+  built_collection: ^5.1.0
   # Functional Programming
-  dartz: ^0.10.0-nullsafety.2
+  dartz: ^0.10.0
   # For regular Unions
-  freezed_annotation: ^0.14.2
+  freezed_annotation: ^0.14.3
   # For generating unique UUIDs
   uuid: ^3.0.4
   # Flutter widget that automatically resizes text to fit perfectly within its bounds
   auto_size_text: ^3.0.0-nullsafety.0
   # simplifies dependency injection
-  injectable: ^1.4.1
+  injectable: ^1.5.0
   # provides internationalization
   # and localization facilities
   intl: ^0.17.0
@@ -86,7 +86,7 @@ dependencies:
   # and whether or not the password appears in the top 10,000 most used passwords.
   password_strength: ^0.2.0
   # A declarative routing solution
-  auto_route: ^2.2.0
+  auto_route: ^2.3.0
   # Helpful package for manipulating "overlays":
   flutter_portal: ^0.4.0
   # A collection of loading indicators animated with flutter.
@@ -107,20 +107,20 @@ dependencies:
   smooth_page_indicator: ^0.3.0-nullsafety.0
   # Defines the annotations used by json_serializable
   # to create code for JSON serialization and deserialization.
-  json_annotation: ^4.0.1
+  json_annotation: ^4.1.0
   # retrofit.dart is a type conversion dio client generator
   # using source_gen and inspired by Chopper and Retrofit.
   retrofit: ^2.0.1
   # A flutter package which will help you to
   # generate pin code fields with beautiful design and animations.
-  pin_code_fields: ^7.2.0
+  pin_code_fields: ^7.3.0
   # Use this package if you need more customization when notifying your user.
-  another_flushbar: ^1.10.23
+  another_flushbar: ^1.10.24
   # A simple API to format dates.
-  date_format: ^2.0.2
+  date_format: ^2.0.4
   # A flutter library to show images from the internet
   # and keep them in the cache directory.
-  cached_network_image: ^3.0.0
+  cached_network_image: ^3.1.0
   # This Flutter package provides a Avatar Glow Widget with cool background glowing animation.
   avatar_glow: ^2.0.1
   # Approximate how your app looks and performs on another device.
@@ -128,7 +128,7 @@ dependencies:
   # Capture in-app user feedback, wishes, ratings and much more.
   wiredash: ^0.7.0+1
   # A flutter package to easily added dotted borders around widgets.
-  dotted_border: ^2.0.0
+  dotted_border: ^2.0.0+1
   # A flutter package which provides a simple way to Showcase/Highlight your widgets step by step.
   showcaseview: ^1.1.0
   # Put a semi-transparent image with the design over the top of the developed layout.
@@ -147,20 +147,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^8.0.2
+  # bloc_test: ^8.1.0
   logger: ^1.0.0
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.9.1
   # Pedantic lints your whole project strictly
   # Pedantic does a great job keeping the project with similar code styles
-  pedantic: ^1.11.0
+  pedantic: ^1.11.1
   # Code Generators
-  build_runner: ^2.0.4
-  freezed: ^0.14.2
-  injectable_generator: ^1.4.1
-  built_value_generator: ^8.0.6
-  auto_route_generator: ^2.1.0
-  retrofit_generator: ^2.0.1
-  json_serializable: ^4.1.3
+  build_runner: ^2.1.1
+  freezed: ^0.14.5
+  injectable_generator: ^1.5.0
+  built_value_generator: ^8.1.2
+  auto_route_generator: ^2.3.0
+  retrofit_generator: ^2.0.1+1
+  json_serializable: ^5.0.0
 
 flutter:
   uses-material-design: true
