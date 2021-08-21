@@ -11,7 +11,6 @@ import 'package:firebase_core/firebase_core.dart' as _i7;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart' as _i8;
 import 'package:flutter_login_facebook/flutter_login_facebook.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
-import 'package:google_sign_in/google_sign_in.dart' as _i9;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:internet_connection_checker/internet_connection_checker.dart'
     as _i10;
@@ -71,7 +70,6 @@ extension GetItInjectableX on _i1.GetIt {
         preResolve: true);
     gh.lazySingleton<_i8.FirebaseCrashlytics>(
         () => modules.firebaseCrashlytics);
-    gh.lazySingleton<_i9.GoogleSignIn>(() => modules.googleSignIn);
     gh.lazySingleton<_i10.InternetConnectionChecker>(
         () => serviceModules.connectionChecker);
     gh.factory<_i11.NetworkCubit>(() => _i11.NetworkCubit());
@@ -83,7 +81,6 @@ extension GetItInjectableX on _i1.GetIt {
         get<_i17.AuthRemoteDatasource>(),
         get<_i18.AuthLocalDatasource>(),
         get<_i6.FirebaseAnalytics>(),
-        get<_i9.GoogleSignIn>(),
         get<_i5.FacebookLogin>()));
     gh.factory<_i19.AuthWatcherCubit>(
         () => _i19.AuthWatcherCubit(get<_i15.AuthFacade>()));

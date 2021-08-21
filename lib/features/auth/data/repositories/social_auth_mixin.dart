@@ -5,7 +5,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:naftacredit/features/auth/data/index.dart';
 import 'package:naftacredit/features/auth/domain/index.dart';
 import 'package:naftacredit/features/core/data/index.dart';
@@ -19,7 +18,6 @@ mixin SocialAuthMixin on AuthFacade {
   AuthRemoteDatasource get remote;
   AuthLocalDatasource get local;
   FirebaseAnalytics get analytics;
-  GoogleSignIn get googleSignIn;
   FacebookLogin get facebookLogin;
 
   @override
@@ -116,37 +114,37 @@ mixin SocialAuthMixin on AuthFacade {
           return left(FailureResponse.unknown(
             message: 'Sign-in with Google coming soon!',
           ));
-          // Clear cached / authenticated user but do not notify UI
-          if (await googleSignIn.isSignedIn()) await signOut(false);
+          // // Clear cached / authenticated user but do not notify UI
+          // if (await googleSignIn.isSignedIn()) await signOut(false);
 
-          // Attempt authenticating user with google credentials
-          var account = await googleSignIn.signIn();
-          // If null, => user cancelled authentication
-          if (account == null) throw FailureResponse.aborted();
+          // // Attempt authenticating user with google credentials
+          // var account = await googleSignIn.signIn();
+          // // If null, => user cancelled authentication
+          // if (account == null) throw FailureResponse.aborted();
 
-          // get authentication details [idToken], [accessToken]
-          final authentication = await account.authentication;
+          // // get authentication details [idToken], [accessToken]
+          // final authentication = await account.authentication;
 
-          try {
-            log.w('ACCESS TOKEN =====> ${authentication.accessToken}');
+          // try {
+          //   log.w('ACCESS TOKEN =====> ${authentication.accessToken}');
 
-            // Fetch AuthCredentials
-            final response =
-                await remote.signInWithGoogle(authentication.accessToken);
+          //   // Fetch AuthCredentials
+          //   final response =
+          //       await remote.signInWithGoogle(authentication.accessToken);
 
-            await analytics.logLogin(loginMethod: 'google');
+          //   await analytics.logLogin(loginMethod: 'google');
 
-            // cache access token
-            await local.cacheUserAccessToken(response.data);
+          //   // cache access token
+          //   await local.cacheUserAccessToken(response.data);
 
-            // sink new user
-            await sink();
+          //   // sink new user
+          //   await sink();
 
-            return right(unit);
-          } on DioError catch (e) {
-            // log.e(e.response.data['message']);
-            return handleFailure(e: e);
-          }
+          //   return right(unit);
+          // } on DioError catch (e) {
+          //   // log.e(e.response.data['message']);
+          //   return handleFailure(e: e);
+          // }
         },
       );
     } on Failure catch (e) {

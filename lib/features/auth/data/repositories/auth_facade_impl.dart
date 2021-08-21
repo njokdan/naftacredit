@@ -6,7 +6,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' hide Response;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:naftacredit/features/auth/data/models/registered_user/registered_user_dto.dart';
 import 'package:naftacredit/features/auth/data/repositories/email_verification_mixin.dart';
@@ -30,9 +29,6 @@ class AuthFacadeImpl extends AuthFacade
   final FacebookLogin facebookLogin;
 
   @override
-  final GoogleSignIn googleSignIn;
-
-  @override
   final AuthLocalDatasource local;
 
   @override
@@ -44,7 +40,6 @@ class AuthFacadeImpl extends AuthFacade
     this.remote,
     this.local,
     this.analytics,
-    this.googleSignIn,
     this.facebookLogin,
   ) : __controller = StreamController.broadcast();
 
